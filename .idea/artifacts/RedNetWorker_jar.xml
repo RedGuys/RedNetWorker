@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RedNetWorker:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RedNetWorker_jar</output-path>
+    <root id="archive" name="RedNetWorker.jar">
+      <element id="module-output" name="RedNetWorker" />
+    </root>
+  </artifact>
+</component>
