@@ -123,7 +123,7 @@ public class HttpClient {
                     out.close();
                 }
                 return connection.getInputStream();
-            case apacheHttpClient: //TODO: Fix Socket is closed
+            case apacheHttpClient:
                 HttpPost req = new HttpPost(url.toURI());
                 if(headers.size() > 0) {
                     headers.forEach((value) -> {
