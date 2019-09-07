@@ -1,6 +1,7 @@
 package RedNetWorker.Clients;
 
 import RedNetWorker.Clients.Enums.HttpLibrary;
+import RedNetWorker.Clients.HttpClientAdditions.FileDownloadResponseHandler;
 import RedNetWorker.Utils.Url;
 
 import org.apache.http.Header;
@@ -11,7 +12,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
+import sun.misc.IOUtils;
 
 import java.io.*;
 import java.net.*;
@@ -177,9 +180,9 @@ public class HttpClient {
     }
 
     public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws IOException {
+        URL url = new URL(uri);
         switch (library) {
             case JavaNet:
-                URL url = new URL(uri);
                 BufferedInputStream bis = new BufferedInputStream(url.openStream());
                 File file = new File(pathToFile);
                 FileOutputStream fis = new FileOutputStream(file);
@@ -192,6 +195,19 @@ public class HttpClient {
                 fis.close();
                 bis.close();
                 return file;
+            case apacheHttpClient:
+                CloseableHttpClient httpclient = HttpClients.custom()
+                        .setRedirectStrategy(new LaxRedirectStrategy()) // adds HTTP REDIRECT support to GET and POST methods
+                        .build();
+                try {
+                    HttpGet get = new HttpGet(url.toURI()); // we're using GET but it could be via POST as well
+                    File downloaded = httpclient.execute(get, new FileDownloadResponseHandler(new File(pathToFile)));
+                    return downloaded;
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                } finally {
+                    httpclient.close();
+                }
         }
         return null;
     }
