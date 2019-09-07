@@ -3,11 +3,15 @@ package RedNetWorker.Clients;
 import RedNetWorker.Clients.Enums.HttpLibrary;
 import RedNetWorker.Utils.Url;
 
+import org.apache.http.Header;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class HttpClient {
@@ -15,11 +19,15 @@ public class HttpClient {
     public int readTimeout = 5000;
     private HttpLibrary library;
     private Proxy proxy = null;
+    public ArrayList<Header> headers = new ArrayList<Header>();
 
     public HttpClient(HttpLibrary library) {
         this.library = library;
         switch (library) {
             case JavaNet:
+
+                break;
+            case apacheHttpClient:
 
                 break;
         }
@@ -31,11 +39,14 @@ public class HttpClient {
             case JavaNet:
 
                 break;
+            case apacheHttpClient:
+
+                break;
         }
     }
 
     //gets
-    public InputStream get(String uri, Map<String,String> args) throws IOException {
+    public InputStream get(String uri, Map<String,String> args) throws IOException, URISyntaxException {
         if(args != null) {
             StringBuilder stringBuilder = new StringBuilder(uri);
             stringBuilder.append("?");
@@ -55,15 +66,26 @@ public class HttpClient {
                 connection.setConnectTimeout(this.connectionTimeout);
                 connection.setReadTimeout(this.readTimeout);
                 return connection.getInputStream();
+            case apacheHttpClient:
+                HttpGet req = new HttpGet(url.toURI());
+                if(headers.size() > 0) {
+                    headers.forEach((value) -> {
+                        req.setHeader(value);
+                    });
+                }
+                try (CloseableHttpClient client = HttpClients.createDefault();
+                     CloseableHttpResponse response = client.execute(req) ) {
+                    return response.getEntity().getContent();
+                }
         }
         return null;
     }
 
-    public InputStream get(String url) throws IOException {
+    public InputStream get(String url) throws URISyntaxException, IOException {
         return get(url,null);
     }
 
-    public String getString(String url, Map<String,String> args) throws IOException {
+    public String getString(String url, Map<String,String> args) throws IOException, URISyntaxException {
         InputStream stream = get(url, args);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -78,7 +100,7 @@ public class HttpClient {
         }
     }
 
-    public String getString(String url) throws IOException {
+    public String getString(String url) throws IOException, URISyntaxException {
         return getString(url,null);
     }
 
@@ -127,7 +149,7 @@ public class HttpClient {
         }
     }
 
-    public String postString(String url) throws IOException {
+    public String postString(String url) throws IOException, URISyntaxException {
         return getString(url,null);
     }
 
