@@ -211,4 +211,7 @@ public class HttpClient {
         }
         return null;
     }
+    public File DownloadFile(String uri, String pathToFile) throws IOException {
+        return DownloadFile(uri,pathToFile,null);
+    }
 }
