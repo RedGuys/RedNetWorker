@@ -4,14 +4,19 @@ import RedNetWorker.Clients.Enums.HttpLibrary;
 import RedNetWorker.Utils.Url;
 
 import org.apache.http.Header;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class HttpClient {
@@ -105,7 +110,7 @@ public class HttpClient {
     }
 
     //post's
-    public InputStream post(String uri, Map<String,String> args) throws IOException {
+    public InputStream post(String uri, Map<String,String> args) throws IOException, URISyntaxException {
         URL url = new URL(uri);
         switch (library) {
             case JavaNet:
@@ -126,15 +131,33 @@ public class HttpClient {
                     out.close();
                 }
                 return connection.getInputStream();
+            case apacheHttpClient:
+                HttpPost req = new HttpPost(url.toURI());
+                if(headers.size() > 0) {
+                    headers.forEach((value) -> {
+                        req.setHeader(value);
+                    });
+                }
+                List<NameValuePair> params = new ArrayList<>();
+                if(args != null) {
+                    args.forEach((name,value) ->{
+                        params.add(new BasicNameValuePair(name,value));
+                    });
+                }
+                req.setEntity(new UrlEncodedFormEntity(params));
+                try (CloseableHttpClient client = HttpClients.createDefault();
+                     CloseableHttpResponse response = client.execute(req) ) {
+                    return response.getEntity().getContent();
+                }
         }
         return null;
     }
 
-    public InputStream post(String uri) throws IOException {
+    public InputStream post(String uri) throws IOException, URISyntaxException {
         return post(uri,null);
     }
 
-    public String postString(String url, Map<String,String> args) throws IOException {
+    public String postString(String url, Map<String,String> args) throws IOException, URISyntaxException {
         InputStream stream = post(url, args);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
