@@ -6,6 +6,7 @@ import RedNetWorker.Utils.Url;
 
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,7 +15,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
-import sun.misc.IOUtils;
 
 import java.io.*;
 import java.net.*;
@@ -76,6 +76,7 @@ public class HttpClient {
                 return connection.getInputStream();
             case apacheHttpClient:
                 HttpGet req = new HttpGet(url.toURI());
+                req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
                 if(headers.size() > 0) {
                     headers.forEach((value) -> {
                         req.setHeader(value);
@@ -211,6 +212,7 @@ public class HttpClient {
         }
         return null;
     }
+
     public File DownloadFile(String uri, String pathToFile) throws IOException {
         return DownloadFile(uri,pathToFile,null);
     }
