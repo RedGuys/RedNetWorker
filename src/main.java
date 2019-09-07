@@ -1,8 +1,11 @@
+import RedNetWorker.Clients.Enums.FTPLibrary;
 import RedNetWorker.Clients.Enums.HttpLibrary;
+import RedNetWorker.Clients.FTPClient;
 import RedNetWorker.Clients.HttpClient;
 import RedNetWorker.Utils.Logger;
 import sun.rmi.runtime.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -10,6 +13,7 @@ import java.util.Map;
 
 public class main {
     public static void main(String[] args) {
+        Logger.info("   HTTP");
         HttpClient client = new HttpClient(HttpLibrary.JavaNet);
         Map<String,String> getArgs = new HashMap<String, String>();
         getArgs.put("userId","1");
@@ -27,7 +31,7 @@ public class main {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-        client = new HttpClient(HttpLibrary.apacheHttpClient);
+        /*client = new HttpClient(HttpLibrary.apacheHttpClient);
         try {
             Logger.info("Apache HttpClient");
             System.out.println(client.getString("https://jsonplaceholder.typicode.com/posts",getArgs));//TODO: Fix Socket is closed
@@ -35,7 +39,7 @@ public class main {
             client.DownloadFile("https://jsonplaceholder.typicode.com/posts","tests/apacheHttpClient.json",fileArgs);
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
         client = new HttpClient(HttpLibrary.apacheFluentAPI);
         try {
             Logger.info("Apache Fluent API");
@@ -43,6 +47,19 @@ public class main {
             System.out.println(client.postString("https://jsonplaceholder.typicode.com/posts",postArgs));
             client.DownloadFile("https://jsonplaceholder.typicode.com/posts","tests/apacheFluentAPI.json",fileArgs);
         } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        Logger.info("   FTP");
+        FTPClient ftpClient = new FTPClient(FTPLibrary.apacheFTPClient);
+        ftpClient.Connect("speedtest.tele2.net");
+        try {
+            ftpClient.LoginAnonymous();
+            Logger.info("Downloading");
+            if(ftpClient.downloadFile("tests/apacheFTPClient.zip","10MB.zip")) {
+                Logger.info("Uploading");
+                ftpClient.uploadFile("tests/apacheFTPClient.zip","/upload/apacheFTPClient.zip");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
