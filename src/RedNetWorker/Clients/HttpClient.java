@@ -176,7 +176,7 @@ public class HttpClient {
         return getString(url,null);
     }
 
-    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws IOException {
+    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws IOException, URISyntaxException {
         URL url = new URL(uri);
         switch (library) {
             case JavaNet:
@@ -205,11 +205,15 @@ public class HttpClient {
                 } finally {
                     httpclient.close();
                 }
+            case apacheFluentAPI:
+                file = new File(pathToFile);
+                Request.Get(url.toURI()).execute().saveContent(file);
+                return file;
         }
         return null;
     }
 
-    public File DownloadFile(String uri, String pathToFile) throws IOException {
+    public File DownloadFile(String uri, String pathToFile) throws IOException, URISyntaxException {
         return DownloadFile(uri,pathToFile,null);
     }
 }
