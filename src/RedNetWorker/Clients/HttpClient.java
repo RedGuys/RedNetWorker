@@ -19,6 +19,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +123,7 @@ public class HttpClient {
                     out.close();
                 }
                 return connection.getInputStream();
-            case apacheHttpClient:
+            case apacheHttpClient: //TODO: Fix Socket is closed
                 HttpPost req = new HttpPost(url.toURI());
                 if(headers.size() > 0) {
                     headers.forEach((value) -> {
@@ -140,6 +141,14 @@ public class HttpClient {
                      CloseableHttpResponse response = client.execute(req) ) {
                     return response.getEntity().getContent();
                 }
+            case apacheFluentAPI:
+                params = new ArrayList<>();
+                if(args != null) {
+                    args.forEach((name,value) ->{
+                        params.add(new BasicNameValuePair(name,value));
+                    });
+                }
+                return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream();
         }
         return null;
     }
