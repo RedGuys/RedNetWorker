@@ -8,6 +8,7 @@ import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -31,26 +32,10 @@ public class HttpClient {
 
     public HttpClient(HttpLibrary library) {
         this.library = library;
-        switch (library) {
-            case JavaNet:
-
-                break;
-            case apacheHttpClient:
-
-                break;
-        }
     }
     public HttpClient(HttpLibrary library, Proxy proxy) {
         this.proxy = proxy;
         this.library = library;
-        switch (library) {
-            case JavaNet:
-
-                break;
-            case apacheHttpClient:
-
-                break;
-        }
     }
 
     //gets
@@ -86,6 +71,8 @@ public class HttpClient {
                      CloseableHttpResponse response = client.execute(req) ) {
                     return response.getEntity().getContent();
                 }
+            case apacheFluentAPI:
+                return Request.Get(url.toURI()).execute().returnContent().asStream();
         }
         return null;
     }
