@@ -130,4 +130,24 @@ public class HttpClient {
     public String postString(String url) throws IOException {
         return getString(url,null);
     }
+
+    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws IOException {
+        switch (library) {
+            case JavaNet:
+                URL url = new URL(uri);
+                BufferedInputStream bis = new BufferedInputStream(url.openStream());
+                File file = new File(pathToFile);
+                FileOutputStream fis = new FileOutputStream(file);
+                byte[] buffer = new byte[1024];
+                int count=0;
+                while((count = bis.read(buffer,0,1024)) != -1)
+                {
+                    fis.write(buffer, 0, count);
+                }
+                fis.close();
+                bis.close();
+                return file;
+        }
+        return null;
+    }
 }
