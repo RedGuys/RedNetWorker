@@ -129,6 +129,14 @@ public class FTPClient {
         return false;
     }
 
+    public boolean delete(String remotePath) throws IOException {
+        switch (library) {
+            case apacheFTPClient:
+                return ftpClient.deleteFile(remotePath);
+        }
+        return false;
+    }
+
     public boolean logout() throws IOException {
         switch (library) {
             case apacheFTPClient:
