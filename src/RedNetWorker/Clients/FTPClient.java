@@ -313,7 +313,7 @@ public class FTPClient {
                 }
                 return sucses;
         }
-        return null;
+        return false;
     }
 
     public boolean disconnect() {
