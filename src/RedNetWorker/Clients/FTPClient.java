@@ -137,6 +137,14 @@ public class FTPClient {
         return false;
     }
 
+    public boolean cd(String remotePath) throws IOException {
+        switch (library) {
+            case apacheFTPClient:
+                return ftpClient.changeWorkingDirectory(remotePath);
+        }
+        return false;
+    }
+
     public boolean logout() throws IOException {
         switch (library) {
             case apacheFTPClient:
