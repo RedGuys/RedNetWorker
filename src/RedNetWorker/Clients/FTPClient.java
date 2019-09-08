@@ -124,19 +124,23 @@ public class FTPClient {
         return null;
     }
 
-    public FTPFile[] list() throws IOException {
+    public ArrayList<FTPFile> list() throws IOException, FTPAbortedException, FTPDataTransferException, FTPException, FTPListParseException, FTPIllegalReplyException {
         switch (library) {
             case apacheFTPClient:
-                return this.ftpClient.listFiles();
+                ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+                for (FTPFile ftpFile : this.ftpClient.listFiles()) {
+                    files.add(ftpFile);
+                }
+                return files;
             case ftp4jFTPClient:
-                FTPFile[] files = new FTPFile[];
-                for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list(path)) {
+                files = new ArrayList<FTPFile>();
+                for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list()) {
                     FTPFile file = new FTPFile();
                     file.setLink(ftpFile.getLink());
                     file.setName(ftpFile.getName());
                     file.setSize(ftpFile.getSize());
                     file.setType(ftpFile.getType());
-                    files[files.length] = file;
+                    files.add(file);
                 }
                 return files;
         }
@@ -309,6 +313,7 @@ public class FTPClient {
                 }
                 return sucses;
         }
+        return null;
     }
 
     public boolean disconnect() {
@@ -324,11 +329,16 @@ public class FTPClient {
             case ftp4jFTPClient:
                 sucses = true;
                 try {
-                    ftp4j.disconnect();
+                    ftp4j.disconnect(true);
                 } catch (IOException e) {
+                    sucses = false;
+                } catch (FTPException e) {
+                    sucses = false;
+                } catch (FTPIllegalReplyException e) {
                     sucses = false;
                 }
                 return sucses;
         }
+        return false;
     }
 }
