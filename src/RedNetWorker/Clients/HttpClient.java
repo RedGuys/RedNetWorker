@@ -6,6 +6,7 @@ import RedNetWorker.Utils.Url;
 
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.fluent.Request;
@@ -40,28 +41,54 @@ public class HttpClient {
     }
 
     //gets
-    public InputStream get(String uri, Map<String,String> args) throws IOException, URISyntaxException {
+    public InputStream get(String uri, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException {
         if(args != null) {
             StringBuilder stringBuilder = new StringBuilder(uri);
             stringBuilder.append("?");
             stringBuilder.append(Url.getParamsString(args));
             uri = stringBuilder.toString();
         }
-        URL url = new URL(uri);
+        URL url;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+        }
         switch (library) {
             case JavaNet:
                 HttpURLConnection connection;
                 if(proxy != null) {
-                    connection = (HttpURLConnection) url.openConnection(this.proxy);
+                    try {
+                        connection = (HttpURLConnection) url.openConnection(this.proxy);
+                    } catch (IOException e) {
+                        throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                    }
                 } else {
-                    connection = (HttpURLConnection) url.openConnection();
+                    try {
+                        connection = (HttpURLConnection) url.openConnection();
+                    } catch (IOException e) {
+                        throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                    }
                 }
-                connection.setRequestMethod("GET");
+                try {
+                    connection.setRequestMethod("GET");
+                } catch (ProtocolException e) {
+                    throw new HttpExceptions.HttpProtocolException(e.getMessage(),uri,e.getCause());
+                }
                 connection.setConnectTimeout(this.connectionTimeout);
                 connection.setReadTimeout(this.readTimeout);
-                return connection.getInputStream();
+                try {
+                    return connection.getInputStream();
+                } catch (IOException e) {
+                    throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                }
             case apacheHttpClient:
-                HttpGet req = new HttpGet(url.toURI());
+                HttpGet req;
+                try {
+                    req = new HttpGet(url.toURI());
+                } catch (URISyntaxException e) {
+                    throw new HttpExceptions.URLException(e.getMessage(),url.toString(),e.getCause());
+                }
                 req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
                 if(headers.size() > 0) {
                     headers.forEach((value) -> {
@@ -70,19 +97,33 @@ public class HttpClient {
                 }
                 try (CloseableHttpClient client = HttpClients.createDefault();
                      CloseableHttpResponse response = client.execute(req) ) {
-                    return response.getEntity().getContent();
+                    try {
+                        return response.getEntity().getContent();
+                    } catch (IOException e) {
+                        throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                    }
+                } catch (ClientProtocolException e) {
+                    throw new HttpExceptions.HttpProtocolException(e.getMessage(),uri,e.getCause());
+                } catch (IOException e) {
+                    throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
                 }
             case apacheFluentAPI:
-                return Request.Get(url.toURI()).execute().returnContent().asStream();
+                try {
+                    return Request.Get(url.toURI()).execute().returnContent().asStream();
+                } catch (URISyntaxException e) {
+                    throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+                } catch (IOException e) {
+                    throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                }
         }
         return null;
     }
 
-    public InputStream get(String url) throws URISyntaxException, IOException {
+    public InputStream get(String url) throws HttpExceptions.URLException, HttpExceptions.HttpProtocolException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException {
         return get(url,null);
     }
 
-    public String getString(String url, Map<String,String> args) throws IOException, URISyntaxException {
+    public String getString(String url, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.HttpProtocolException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException {
         InputStream stream = get(url, args);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -97,34 +138,64 @@ public class HttpClient {
         }
     }
 
-    public String getString(String url) throws IOException, URISyntaxException {
+    public String getString(String url) throws HttpExceptions.URLException, HttpExceptions.HttpProtocolException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException {
         return getString(url,null);
     }
 
     //post's
-    public InputStream post(String uri, Map<String,String> args) throws IOException, URISyntaxException {
-        URL url = new URL(uri);
+    public InputStream post(String uri, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.OpenConnectionException, HttpExceptions.HttpProtocolException, HttpExceptions.OutputStreamException, HttpExceptions.InputStreamException, HttpExceptions.EncodingException {
+        URL url;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+        }
         switch (library) {
             case JavaNet:
                 HttpURLConnection connection;
                 if(proxy != null) {
-                    connection = (HttpURLConnection) url.openConnection(this.proxy);
+                    try {
+                        connection = (HttpURLConnection) url.openConnection(this.proxy);
+                    } catch (IOException e) {
+                        throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                    }
                 } else {
-                    connection = (HttpURLConnection) url.openConnection();
+                    try {
+                        connection = (HttpURLConnection) url.openConnection();
+                    } catch (IOException e) {
+                        throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                    }
                 }
-                connection.setRequestMethod("POST");
+                try {
+                    connection.setRequestMethod("POST");
+                } catch (ProtocolException e) {
+                    throw new HttpExceptions.HttpProtocolException(e.getMessage(),uri,e.getCause());
+                }
                 connection.setConnectTimeout(this.connectionTimeout);
                 connection.setReadTimeout(this.readTimeout);
-                if(args != null) {
-                    connection.setDoOutput(true);
-                    DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-                    out.writeBytes(Url.getParamsString(args));
-                    out.flush();
-                    out.close();
+                try {
+                    if (args != null) {
+                        connection.setDoOutput(true);
+                        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+                        out.writeBytes(Url.getParamsString(args));
+                        out.flush();
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    throw new HttpExceptions.OutputStreamException(e.getMessage(),uri,e.getCause());
                 }
-                return connection.getInputStream();
+                try {
+                    return connection.getInputStream();
+                } catch (IOException e) {
+                    throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                }
             case apacheHttpClient:
-                HttpPost req = new HttpPost(url.toURI());
+                HttpPost req;
+                try {
+                    req = new HttpPost(url.toURI());
+                } catch (URISyntaxException e) {
+                    throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+                }
                 if(headers.size() > 0) {
                     headers.forEach((value) -> {
                         req.setHeader(value);
@@ -132,32 +203,54 @@ public class HttpClient {
                 }
                 List<NameValuePair> params = new ArrayList<>();
                 if(args != null) {
-                    args.forEach((name,value) ->{
-                        params.add(new BasicNameValuePair(name,value));
+                    List<NameValuePair> finalParams1 = params;
+                    args.forEach((name, value) ->{
+                        finalParams1.add(new BasicNameValuePair(name,value));
                     });
+                    params = finalParams1;
                 }
-                req.setEntity(new UrlEncodedFormEntity(params));
+                try {
+                    req.setEntity(new UrlEncodedFormEntity(params));
+                } catch (UnsupportedEncodingException e) {
+                    throw new HttpExceptions.EncodingException(e.getMessage(),uri,e.getCause());
+                }
                 try (CloseableHttpClient client = HttpClients.createDefault();
                      CloseableHttpResponse response = client.execute(req) ) {
-                    return response.getEntity().getContent();
+                    try {
+                        return response.getEntity().getContent();
+                    } catch (IOException e) {
+                        throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                    }
+                } catch (ClientProtocolException e) {
+                    throw new HttpExceptions.HttpProtocolException(e.getMessage(),uri,e.getCause());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             case apacheFluentAPI:
                 params = new ArrayList<>();
                 if(args != null) {
-                    args.forEach((name,value) ->{
-                        params.add(new BasicNameValuePair(name,value));
+                    List<NameValuePair> finalParams = params;
+                    args.forEach((name, value) ->{
+                        finalParams.add(new BasicNameValuePair(name,value));
                     });
+                    params = finalParams;
                 }
-                return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream();
+                try {
+                    return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream();
+                } catch (URISyntaxException e) {
+                    throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+                } catch (IOException e) {
+                    throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                }
         }
         return null;
     }
 
-    public InputStream post(String uri) throws IOException, URISyntaxException {
+    public InputStream post(String uri) throws HttpExceptions.EncodingException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException, HttpExceptions.OutputStreamException, HttpExceptions.OpenConnectionException, HttpExceptions.URLException {
         return post(uri,null);
     }
 
-    public String postString(String url, Map<String,String> args) throws IOException, URISyntaxException {
+    public String postString(String url, Map<String,String> args) throws HttpExceptions.EncodingException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException, HttpExceptions.OutputStreamException, HttpExceptions.OpenConnectionException, HttpExceptions.URLException {
         InputStream stream = post(url, args);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -172,25 +265,46 @@ public class HttpClient {
         }
     }
 
-    public String postString(String url) throws IOException, URISyntaxException {
+    public String postString(String url) throws HttpExceptions.URLException, HttpExceptions.HttpProtocolException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException {
         return getString(url,null);
     }
 
-    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws IOException, URISyntaxException {
-        URL url = new URL(uri);
+    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.OpenConnectionException, FileNotFoundException, HttpExceptions.InputStreamException, HttpExceptions.OutputStreamException, HttpExceptions.HttpProtocolException {
+        URL url;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+        }
         switch (library) {
             case JavaNet:
-                BufferedInputStream bis = new BufferedInputStream(url.openStream());
+                BufferedInputStream bis;
+                try {
+                    bis = new BufferedInputStream(url.openStream());
+                } catch (IOException e) {
+                    throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                }
                 File file = new File(pathToFile);
                 FileOutputStream fis = new FileOutputStream(file);
                 byte[] buffer = new byte[1024];
                 int count=0;
-                while((count = bis.read(buffer,0,1024)) != -1)
-                {
-                    fis.write(buffer, 0, count);
+                try {
+                    while ((count = bis.read(buffer, 0, 1024)) != -1) {
+                        fis.write(buffer, 0, count);
+                    }
+                } catch (IOException e) {
+                    throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
                 }
-                fis.close();
-                bis.close();
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                }
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    throw new HttpExceptions.OutputStreamException(e.getMessage(),uri,e.getCause());
+                }
                 return file;
             case apacheHttpClient:
                 CloseableHttpClient httpclient = HttpClients.custom()
@@ -203,17 +317,29 @@ public class HttpClient {
                 } catch (Exception e) {
                     throw new IllegalStateException(e);
                 } finally {
-                    httpclient.close();
+                    try {
+                        httpclient.close();
+                    } catch (IOException e) {
+                        throw new HttpExceptions.InputStreamException(e.getMessage(),uri,e.getCause());
+                    }
                 }
             case apacheFluentAPI:
                 file = new File(pathToFile);
-                Request.Get(url.toURI()).execute().saveContent(file);
+                try {
+                    Request.Get(url.toURI()).execute().saveContent(file);
+                } catch (URISyntaxException e) {
+                    throw new HttpExceptions.URLException(e.getMessage(),uri,e.getCause());
+                } catch (ClientProtocolException e) {
+                    throw new HttpExceptions.HttpProtocolException(e.getMessage(),uri,e.getCause());
+                } catch (IOException e) {
+                    throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
+                }
                 return file;
         }
         return null;
     }
 
-    public File DownloadFile(String uri, String pathToFile) throws IOException, URISyntaxException {
+    public File DownloadFile(String uri, String pathToFile) throws FileNotFoundException, HttpExceptions.URLException, HttpExceptions.OutputStreamException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException {
         return DownloadFile(uri,pathToFile,null);
     }
 }

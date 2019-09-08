@@ -2,12 +2,13 @@ import RedNetWorker.Clients.Enums.FTPLibrary;
 import RedNetWorker.Clients.Enums.HttpLibrary;
 import RedNetWorker.Clients.FTPClient;
 import RedNetWorker.Clients.HttpClient;
+import RedNetWorker.Clients.HttpExceptions;
 import RedNetWorker.Utils.Logger;
+
 import it.sauronsoftware.ftp4j.FTPException;
 import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
-import sun.rmi.runtime.Log;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class main {
             System.out.println(client.getString("https://jsonplaceholder.typicode.com/posts",getArgs));
             System.out.println(client.postString("https://jsonplaceholder.typicode.com/posts",postArgs));
             client.DownloadFile("https://jsonplaceholder.typicode.com/posts","tests/JavaNet.json",fileArgs);
-        } catch (IOException | URISyntaxException e) {
+        } catch (HttpExceptions.OutputStreamException | HttpExceptions.EncodingException | HttpExceptions.OpenConnectionException | HttpExceptions.HttpProtocolException | HttpExceptions.URLException | HttpExceptions.InputStreamException | FileNotFoundException e) {
             e.printStackTrace();
         }
         /*client = new HttpClient(HttpLibrary.apacheHttpClient);
@@ -48,7 +49,9 @@ public class main {
             System.out.println(client.getString("https://jsonplaceholder.typicode.com/posts",getArgs));
             System.out.println(client.postString("https://jsonplaceholder.typicode.com/posts",postArgs));
             client.DownloadFile("https://jsonplaceholder.typicode.com/posts","tests/apacheFluentAPI.json",fileArgs);
-        } catch (IOException | URISyntaxException e) {
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (HttpExceptions.OutputStreamException | HttpExceptions.EncodingException | HttpExceptions.OpenConnectionException | HttpExceptions.HttpProtocolException | HttpExceptions.URLException | HttpExceptions.InputStreamException e) {
             e.printStackTrace();
         }
         Logger.info("   FTP");
