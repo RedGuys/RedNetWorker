@@ -1,5 +1,6 @@
 package RedNetWorker.Clients.Enums;
 
 public enum FTPLibrary {
-    apacheFTPClient
+    apacheFTPClient,
+    ftp4jFTPClient
 }

@@ -10,5 +10,6 @@
     <orderEntry type="library" name="apacheHttpClient" level="project" />
     <orderEntry type="library" name="org.apache.httpcomponents:fluent-hc:4.5.6" level="project" />
     <orderEntry type="library" name="commons-net:commons-net:3.6" level="project" />
+    <orderEntry type="library" name="ftp4j-1.7.2" level="project" />
   </component>
 </module>
