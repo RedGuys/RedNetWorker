@@ -33,6 +33,8 @@ public class main {
             client.DownloadFile("https://jsonplaceholder.typicode.com/posts","tests/JavaNet.json",fileArgs);
         } catch (HttpExceptions.OutputStreamException | HttpExceptions.EncodingException | HttpExceptions.OpenConnectionException | HttpExceptions.HttpProtocolException | HttpExceptions.URLException | HttpExceptions.InputStreamException | FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         /*client = new HttpClient(HttpLibrary.apacheHttpClient);
         try {
@@ -52,6 +54,8 @@ public class main {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (HttpExceptions.OutputStreamException | HttpExceptions.EncodingException | HttpExceptions.OpenConnectionException | HttpExceptions.HttpProtocolException | HttpExceptions.URLException | HttpExceptions.InputStreamException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         Logger.info("   FTP");

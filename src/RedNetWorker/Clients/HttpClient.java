@@ -269,7 +269,7 @@ public class HttpClient {
         return getString(url,null);
     }
 
-    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.OpenConnectionException, FileNotFoundException, HttpExceptions.InputStreamException, HttpExceptions.OutputStreamException, HttpExceptions.HttpProtocolException {
+    public File DownloadFile(String uri, String pathToFile, Map<String,String> args) throws HttpExceptions.URLException, HttpExceptions.OpenConnectionException, IOException, HttpExceptions.InputStreamException, HttpExceptions.OutputStreamException, HttpExceptions.HttpProtocolException {
         URL url;
         try {
             url = new URL(uri);
@@ -285,7 +285,13 @@ public class HttpClient {
                     throw new HttpExceptions.OpenConnectionException(e.getMessage(),uri,e.getCause());
                 }
                 File file = new File(pathToFile);
-                FileOutputStream fis = new FileOutputStream(file);
+                FileOutputStream fis = null;
+                try {
+                    fis = new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    file.getParentFile().mkdirs();
+                    fis = new FileOutputStream(file);
+                }
                 byte[] buffer = new byte[1024];
                 int count=0;
                 try {
@@ -339,7 +345,7 @@ public class HttpClient {
         return null;
     }
 
-    public File DownloadFile(String uri, String pathToFile) throws FileNotFoundException, HttpExceptions.URLException, HttpExceptions.OutputStreamException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException {
+    public File DownloadFile(String uri, String pathToFile) throws IOException, HttpExceptions.URLException, HttpExceptions.OutputStreamException, HttpExceptions.OpenConnectionException, HttpExceptions.InputStreamException, HttpExceptions.HttpProtocolException {
         return DownloadFile(uri,pathToFile,null);
     }
 }

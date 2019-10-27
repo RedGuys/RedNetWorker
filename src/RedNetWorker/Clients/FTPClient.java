@@ -1,6 +1,7 @@
 package RedNetWorker.Clients;
 
 import RedNetWorker.Clients.Enums.FTPLibrary;
+import RedNetWorker.Utils.Logger;
 import it.sauronsoftware.ftp4j.*;
 import org.apache.commons.net.ftp.FTPFile;
 
