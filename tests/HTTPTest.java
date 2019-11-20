@@ -1,6 +1,6 @@
 import RedNetWorker.Clients.Enums.HttpLibrary;
 import RedNetWorker.Clients.HttpClient.HttpClient;
-import RedNetWorker.Clients.HttpClient.HttpExceptions;
+import RedNetWorker.Clients.HttpClient.HttpExceptions.HttpExceptions;
 import RedNetWorker.Utils.Logger;
 
 import java.io.FileNotFoundException;
