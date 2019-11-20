@@ -1,4 +1,4 @@
-package RedNetWorker.Clients.HttpClientAdditions;
+package RedNetWorker.Clients.HttpClient;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;

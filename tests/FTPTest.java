@@ -1,5 +1,5 @@
 import RedNetWorker.Clients.Enums.FTPLibrary;
-import RedNetWorker.Clients.FTPClient;
+import RedNetWorker.Clients.FTPClient.FTPClient;
 import RedNetWorker.Utils.Logger;
 import it.sauronsoftware.ftp4j.FTPException;
 import it.sauronsoftware.ftp4j.FTPIllegalReplyException;

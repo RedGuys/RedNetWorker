@@ -1,7 +1,6 @@
-package RedNetWorker.Clients;
+package RedNetWorker.Clients.HttpClient;
 
 import RedNetWorker.Clients.Enums.HttpLibrary;
-import RedNetWorker.Clients.HttpClientAdditions.FileDownloadResponseHandler;
 import RedNetWorker.Utils.Url;
 
 import org.apache.http.Header;

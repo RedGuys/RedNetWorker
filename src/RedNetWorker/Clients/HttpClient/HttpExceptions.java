@@ -1,4 +1,4 @@
-package RedNetWorker.Clients;
+package RedNetWorker.Clients.HttpClient;
 
 public class HttpExceptions {
     public static class URLException extends Exception {

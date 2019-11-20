@@ -1,7 +1,6 @@
-package RedNetWorker.Clients;
+package RedNetWorker.Clients.FTPClient;
 
 import RedNetWorker.Clients.Enums.FTPLibrary;
-import RedNetWorker.Utils.Logger;
 import it.sauronsoftware.ftp4j.*;
 import org.apache.commons.net.ftp.FTPFile;
 
@@ -9,13 +8,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class FTPClient {
-    //For apacheFTPClient
-    private org.apache.commons.net.ftp.FTPClient ftpClient;
-    //For apacheFTPClient
+    private org.apache.commons.net.ftp.FTPClient ftpClient; //For apacheFTPClient
     private FTPLibrary library;
-    //For ftp4j
-    private it.sauronsoftware.ftp4j.FTPClient ftp4j;
-    //For ftp4j
+    private it.sauronsoftware.ftp4j.FTPClient ftp4j; //For ftp4j
     private String workingDirectory = "/";
     public FTPClient(FTPLibrary library) {
         this.library = library;
