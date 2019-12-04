@@ -6,15 +6,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public interface IFTPClient {
-    public void Connect(String host,int port) throws OpenConnectionException;
+    public void connect(String host,int port) throws OpenConnectionException;
 
-    public void Connect(String host) throws OpenConnectionException;
+    public void connect(String host) throws OpenConnectionException;
 
-    public void Login(String login, String password) throws AuthorizationException, ConnectionException, UnknownServerErrorException;
+    public void login(String login, String password) throws AuthorizationException, ConnectionException, UnknownServerErrorException;
 
-    public void LoginAnonymous(String email) throws AuthorizationException, ConnectionException, UnknownServerErrorException;
+    public void loginAnonymous(String email) throws AuthorizationException, ConnectionException, UnknownServerErrorException;
 
-    public void LoginAnonymous() throws AuthorizationException, ConnectionException, UnknownServerErrorException;
+    public void loginAnonymous() throws AuthorizationException, ConnectionException, UnknownServerErrorException;
 
     public void setWorkingDirectory(String workingDirectory) throws ConnectionException, AuthorizationException, UnknownServerErrorException;
 
