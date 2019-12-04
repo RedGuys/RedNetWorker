@@ -131,46 +131,70 @@ public class FTPClient {
         return this.workingDirectory;
     }
 
-    public ArrayList<FTPFile> list(String path) throws IOException, FTPAbortedException, FTPDataTransferException, FTPException, FTPListParseException, FTPIllegalReplyException {
+    public ArrayList<FTPFile> list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
         switch (library) {
             case apacheFTPClient:
                 ArrayList<FTPFile> files = new ArrayList<FTPFile>();
-                for (FTPFile ftpFile : this.ftpClient.listFiles(path)) {
-                    files.add(ftpFile);
+                try {
+                    for (FTPFile ftpFile : this.ftpClient.listFiles(path)) {
+                        files.add(ftpFile);
+                    }
+                } catch (IOException e) {
+                    throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
                 }
                 return files;
             case ftp4jFTPClient:
                 files = new ArrayList<FTPFile>();
-                for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list(path)) {
-                    FTPFile file = new FTPFile();
-                    file.setLink(ftpFile.getLink());
-                    file.setName(ftpFile.getName());
-                    file.setSize(ftpFile.getSize());
-                    file.setType(ftpFile.getType());
-                    files.add(file);
+                try {
+                    for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list(path)) {
+                        FTPFile file = new FTPFile();
+                        file.setLink(ftpFile.getLink());
+                        file.setName(ftpFile.getName());
+                        file.setSize(ftpFile.getSize());
+                        file.setType(ftpFile.getType());
+                        files.add(file);
+                    }
+                } catch (IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException e) {
+                    throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+                } catch (FTPAbortedException e) {
+                    throw new AbortedException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+                } catch (FTPListParseException e) {
+                    throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
                 }
                 return files;
         }
         return null;
     }
 
-    public ArrayList<FTPFile> list() throws IOException, FTPAbortedException, FTPDataTransferException, FTPException, FTPListParseException, FTPIllegalReplyException {
+    public ArrayList<FTPFile> list() throws ConnectionException, AbortedException, UnknownServerErrorException {
         switch (library) {
             case apacheFTPClient:
                 ArrayList<FTPFile> files = new ArrayList<FTPFile>();
-                for (FTPFile ftpFile : this.ftpClient.listFiles()) {
-                    files.add(ftpFile);
+                try {
+                    for (FTPFile ftpFile : this.ftpClient.listFiles()) {
+                        files.add(ftpFile);
+                    }
+                } catch (IOException e) {
+                    throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
                 }
                 return files;
             case ftp4jFTPClient:
                 files = new ArrayList<FTPFile>();
-                for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list()) {
-                    FTPFile file = new FTPFile();
-                    file.setLink(ftpFile.getLink());
-                    file.setName(ftpFile.getName());
-                    file.setSize(ftpFile.getSize());
-                    file.setType(ftpFile.getType());
-                    files.add(file);
+                try {
+                    for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.ftp4j.list()) {
+                        FTPFile file = new FTPFile();
+                        file.setLink(ftpFile.getLink());
+                        file.setName(ftpFile.getName());
+                        file.setSize(ftpFile.getSize());
+                        file.setType(ftpFile.getType());
+                        files.add(file);
+                    }
+                } catch (IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException e) {
+                    throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+                } catch (FTPAbortedException e) {
+                    throw new AbortedException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+                } catch (FTPListParseException e) {
+                    throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
                 }
                 return files;
         }
