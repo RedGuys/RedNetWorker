@@ -58,7 +58,7 @@ public class JavaNet implements IHttpClient {
 
     @Override
     public InputStream get(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        return get(url,null);
+        return get(url, (Map<String, Object>) null);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class JavaNet implements IHttpClient {
 
     @Override
     public String getString(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        return getString(url,null);
+        return getString(url, (Map<String, Object>) null);
     }
 
     @Override
@@ -131,12 +131,12 @@ public class JavaNet implements IHttpClient {
 
     @Override
     public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException {
-        return post(uri, postArgs, null);
+        return post(uri, postArgs, (Map<String, Object>) null);
     }
 
     @Override
     public InputStream post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException {
-        return post(uri, null, null);
+        return post(uri, null, (Map<String, Object>) null);
     }
 
     @Override
@@ -157,17 +157,17 @@ public class JavaNet implements IHttpClient {
 
     @Override
     public String postString(String url, Map<String, Object> postArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException {
-        return postString(url, postArgs, null);
+        return postString(url, postArgs, (Map<String, Object>) null);
     }
 
 
     @Override
     public String postString(String url) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException {
-        return postString(url, null, null);
+        return postString(url, null, (Map<String, Object>) null);
     }
 
     @Override
-    public File DownloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, FileNotFoundException, InputStreamException, OutputStreamException {
+    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, FileNotFoundException, InputStreamException, OutputStreamException {
         URL url;
         try {
             url = new URL(uri+HttpUtils.buildGet(getArgs));
@@ -211,7 +211,7 @@ public class JavaNet implements IHttpClient {
     }
 
     @Override
-    public File DownloadFile(String uri, String pathToFile) throws FileNotFoundException, URLException, OutputStreamException, OpenConnectionException, InputStreamException {
-        return DownloadFile(uri, pathToFile, null);
+    public File downloadFile(String uri, String pathToFile) throws FileNotFoundException, URLException, OutputStreamException, OpenConnectionException, InputStreamException {
+        return downloadFile(uri, pathToFile, null);
     }
 }

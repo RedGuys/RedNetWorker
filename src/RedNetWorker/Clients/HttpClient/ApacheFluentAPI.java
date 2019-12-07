@@ -77,7 +77,7 @@ public class ApacheFluentAPI implements IHttpClient {
             params = finalParams;
         }
         try {
-            return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream();
+            return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream(); //TODO: fix error with 301 HTTP code
         } catch (URISyntaxException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         } catch (IOException e) {
