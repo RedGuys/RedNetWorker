@@ -141,7 +141,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
                 content.append(inputLine);
             }
             return content.toString();
@@ -292,7 +292,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
                 content.append(inputLine);
             }
             return content.toString();
