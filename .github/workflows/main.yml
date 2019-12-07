@@ -17,5 +17,5 @@ jobs:
     - name: compile ApacheFluentAPI test
       run: javac -sourcepath ./src -classpath ./libs/httpcore-4.4.10.jar:./libs/httpclient-4.5.6.jar:./libs/fluent-hc-4.5.6.jar:./libs/commons-logging-1.2.jar:./libs/commons-codec-1.10.jar -d test tests/ApacheFluentAPITest.java
     - name: run ApacheFluentAPI test
-      run: java -classpath ./test ApacheFluentAPI
+      run: java -classpath ./test ApacheFluentAPI.ApacheFluentAPI
       
