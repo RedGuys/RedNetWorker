@@ -2,6 +2,9 @@ import RedNetWorker.Clients.HttpClient.ApacheFluentAPI;
 import RedNetWorker.Clients.HttpClient.HttpExceptions.*;
 import RedNetWorker.Utils.Logger;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +20,22 @@ public class ApacheFluentAPITest {
             Logger.info("post - ok!");
         } else {
             Logger.error("post - error");
+            Logger.error("Returned: "+result);
+            throw new Exception("Illegal result");
+        }
+        result = apacheFluentAPI.getString("https://api.redguy.ru/tests/get", arg);
+        if(result.equals("rus=ку-num=19-eng=hi-")) {
+            Logger.info("get - ok!");
+        } else {
+            Logger.error("get - error");
+            Logger.error("Returned: "+result);
+            throw new Exception("Illegal result");
+        }
+        File file = apacheFluentAPI.downloadFile("https://api.redguy.ru/tests/get", "ApacheFluentAPI.test", arg);
+        if(new BufferedReader(new FileReader(file)).readLine().equals("rus=ку-num=19-eng=hi-")) {
+            Logger.info("download - ok!");
+        } else {
+            Logger.error("download - error");
             Logger.error("Returned: "+result);
             throw new Exception("Illegal result");
         }

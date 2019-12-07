@@ -40,18 +40,19 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public String getString(String url, Map<String, Object> args) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        InputStream stream = get(url, args);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return "";
+    public String getString(String uri, Map<String, Object> args) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
+        URL url;
+        try {
+            url = new URL(uri+ HttpUtils.buildGet(args));
+        } catch (MalformedURLException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        }
+        try {
+            return Request.Get(url.toURI()).execute().returnContent().asString();
+        } catch (URISyntaxException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        } catch (IOException e) {
+            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
         }
     }
 
@@ -107,7 +108,7 @@ public class ApacheFluentAPI implements IHttpClient {
             return content.toString();
         } catch (final Exception ex) {
             ex.printStackTrace();
-            return "";
+            return null;
         }
     }
 
