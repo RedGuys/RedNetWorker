@@ -1,15 +1,10 @@
 package RedNetWorker.Utils;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
 public class HttpUtils {
-    @NotNull
-    @Contract(pure = true)
     public static String buildGet(Map<String,Object> args) {
         if(args == null) {
             return "";
