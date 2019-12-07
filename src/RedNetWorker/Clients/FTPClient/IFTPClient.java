@@ -16,7 +16,7 @@ public interface IFTPClient {
 
     public void loginAnonymous() throws AuthorizationException, ConnectionException, UnknownServerErrorException;
 
-    public void setWorkingDirectory(String workingDirectory) throws ConnectionException, AuthorizationException, UnknownServerErrorException;
+    public void setWorkingDirectory(String workingDirectory) throws ConnectionException;
 
     public String getWorkingDirectory() throws ConnectionException;
 

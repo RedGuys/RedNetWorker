@@ -21,9 +21,9 @@ public class DataTime {
         this.unixTimestamp = componentTimeToTimestamp(year, month, day, hour, minute, second);
     }
 
-    public DataTime(int unixTimestamp) {
+    public DataTime(long unixTimestamp) {
         Calendar mydate = Calendar.getInstance();
-        mydate.setTimeInMillis(unixTimestamp*1000);
+        mydate.setTimeInMillis(unixTimestamp*1000L);
         this.unixTimestamp = unixTimestamp;
         this.year = mydate.get(Calendar.YEAR);
         this.month = mydate.get(Calendar.MONTH);
