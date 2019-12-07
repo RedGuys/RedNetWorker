@@ -33,7 +33,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public void connect(String host) throws OpenConnectionException {
-        connect(host,22);
+        connect(host,21);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void setWorkingDirectory(String workingDirectory) throws ConnectionException, AuthorizationException, UnknownServerErrorException {
+    public void setWorkingDirectory(String workingDirectory) throws ConnectionException {
         try {
             client.changeWorkingDirectory(workingDirectory);
         } catch (IOException e) {
@@ -89,7 +89,7 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
                 myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.createDate = null;
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
