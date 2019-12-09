@@ -79,7 +79,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public ArrayList<FTPFile> list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles(path)) {
@@ -97,11 +97,11 @@ public class ApacheFTPClient implements IFTPClient {
         } catch (IOException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
-        return files;
+        return files.toArray(new FTPFile[0]);
     }
 
     @Override
-    public ArrayList<FTPFile> list() throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] list() throws ConnectionException, AbortedException, UnknownServerErrorException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles()) {
@@ -119,7 +119,7 @@ public class ApacheFTPClient implements IFTPClient {
         } catch (IOException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
-        return files;
+        return files.toArray(new FTPFile[0]);
     }
 
     @Override

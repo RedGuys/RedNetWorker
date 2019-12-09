@@ -4,7 +4,6 @@ import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public interface IFTPClient {
     public void connect(String host,int port) throws OpenConnectionException;
@@ -21,9 +20,9 @@ public interface IFTPClient {
 
     public String getWorkingDirectory() throws ConnectionException;
 
-    public ArrayList<FTPFile> list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException;
+    public FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException;
 
-    public ArrayList<FTPFile> list() throws ConnectionException, AbortedException, UnknownServerErrorException;
+    public FTPFile[] list() throws ConnectionException, AbortedException, UnknownServerErrorException;
 
     public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException, FileNotFoundException;
 

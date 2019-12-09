@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Ftp4jFTPClient implements IFTPClient {
+    public boolean remoteRenameBlockFix = false; //Fix problem with upload files to server where blocked file renaming
     private it.sauronsoftware.ftp4j.FTPClient client;
     private String host;
     private int port;
@@ -84,7 +85,7 @@ public class Ftp4jFTPClient implements IFTPClient {
     }
 
     @Override
-    public ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public ru.redguy.rednetworker.clients.ftp.FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
         ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> files = new ArrayList<>();
         try {
             for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.client.list(path)) {
@@ -106,11 +107,11 @@ public class Ftp4jFTPClient implements IFTPClient {
         } catch (FTPListParseException e) {
             throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
-        return files;
+        return files.toArray(new FTPFile[0]);
     }
 
     @Override
-    public ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> list() throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public ru.redguy.rednetworker.clients.ftp.FTPFile[] list() throws ConnectionException, AbortedException, UnknownServerErrorException {
         ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> files = new ArrayList<>();
         try {
             for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.client.list()) {
@@ -132,14 +133,21 @@ public class Ftp4jFTPClient implements IFTPClient {
         } catch (FTPListParseException e) {
             throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
-        return files;
+        return files.toArray(new FTPFile[0]);
     }
 
     @Override
     public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException, FileNotFoundException {
         try {
-            this.client.upload(new File(localPath));
-            this.client.rename(getWorkingDirectory()+new File(localPath).getName(),remotePath);
+            if(remoteRenameBlockFix) {
+                File file = new File(localPath);
+                file.renameTo(new File(new File(remotePath).getName()));
+                client.upload(file);
+                file.renameTo(new File(localPath));
+            } else {
+                this.client.upload(new File(localPath));
+                this.client.rename(getWorkingDirectory() + new File(localPath).getName(), remotePath);
+            }
         } catch (IOException|FTPException|FTPDataTransferException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         } catch (FTPIllegalReplyException e) {

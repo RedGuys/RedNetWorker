@@ -1,0 +1,20 @@
+name: FTPTests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '9.0.4' # The JDK version to make available on the path. Takes a whole or semver JDK version, or 1.x syntax (e.g. 1.8 => Jdk 8.x). To specify a specific version for JDK 8 or older use the following pattern (8.0.x)
+          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+          architecture: x64 # (x64 or x86) - defaults to x64
+      - name: compile Ftp4jFTPClientTest test
+        run: javac -sourcepath ./src -classpath ./libs/httpcore-4.4.10.jar:./libs/httpclient-4.5.6.jar:./libs/fluent-hc-4.5.6.jar:./libs/commons-logging-1.2.jar:./libs/commons-codec-1.10.jar:./libs/jsch-0.1.54.jar:./libs/ftp4j-1.7.2.jar:./libs/commons-net-3.6.jar:./libs/apacheHttpClient/commons-codec-1.11.jar:./libs/apacheHttpClient/fluent-hc-4.5.9.jar:./libs/apacheHttpClient/httpclient-4.5.9.jar:./libs/apacheHttpClient/httpclient-cache-4.5.9.jar:./libs/apacheHttpClient/httpclient-osgi-4.5.9.jar:./libs/apacheHttpClient/httpclient-win-4.5.9.jar:./libs/apacheHttpClient/httpcore-4.4.11.jar:./libs/apacheHttpClient/httpmime-4.5.9.jar:./libs/apacheHttpClient/jna-4.5.2.jar:./libs/apacheHttpClient/jna-platform-4.5.2.jar -d test tests/Ftp4jFTPClientTest.java
+      - name: run Ftp4jFTPClientTest test
+        run: java -classpath ./test:./libs/httpcore-4.4.10.jar:./libs/httpclient-4.5.6.jar:./libs/fluent-hc-4.5.6.jar:./libs/commons-logging-1.2.jar:./libs/commons-codec-1.10.jar:./libs/jsch-0.1.54.jar:./libs/ftp4j-1.7.2.jar:./libs/commons-net-3.6.jar:./libs/apacheHttpClient/commons-codec-1.11.jar:./libs/apacheHttpClient/fluent-hc-4.5.9.jar:./libs/apacheHttpClient/httpclient-4.5.9.jar:./libs/apacheHttpClient/httpclient-cache-4.5.9.jar:./libs/apacheHttpClient/httpclient-osgi-4.5.9.jar:./libs/apacheHttpClient/httpclient-win-4.5.9.jar:./libs/apacheHttpClient/httpcore-4.4.11.jar:./libs/apacheHttpClient/httpmime-4.5.9.jar:./libs/apacheHttpClient/jna-4.5.2.jar:./libs/apacheHttpClient/jna-platform-4.5.2.jar Ftp4jFTPClientTest
