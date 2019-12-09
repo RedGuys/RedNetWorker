@@ -4,10 +4,7 @@ import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 import ru.redguy.rednetworker.Utils.DataTime;
 import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ApacheFTPClient implements IFTPClient {
@@ -127,13 +124,15 @@ public class ApacheFTPClient implements IFTPClient {
     public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException, FileNotFoundException {
         FileInputStream fis = null;
         try {
+            File file = new File(remotePath);
+            client.allocate((int) file.length());
             fis = new FileInputStream(localPath);
             client.storeFile(remotePath, fis);
             fis.close();
         } catch (FileNotFoundException e) {
             throw e;
         } catch (IOException e) {
-            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
         }
     }
 
