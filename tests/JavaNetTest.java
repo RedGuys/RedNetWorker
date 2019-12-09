@@ -1,6 +1,6 @@
-import RedNetWorker.Clients.HttpClient.ApacheHttpClient;
-import RedNetWorker.Clients.HttpClient.JavaNet;
-import RedNetWorker.Utils.Logger;
+import ru.redguy.rednetworker.clients.http.ApacheHttpClient;
+import ru.redguy.rednetworker.clients.http.JavaNet;
+import ru.redguy.rednetworker.Utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
