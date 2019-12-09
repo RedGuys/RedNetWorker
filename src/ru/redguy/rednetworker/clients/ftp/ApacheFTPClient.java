@@ -234,5 +234,12 @@ public class ApacheFTPClient implements IFTPClient {
         }
     }
 
-
+    @Override
+    public String[] runCommand(String command, String args) throws ConnectionException {
+        try {
+            return client.doCommandAsStrings(command,args);
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
 }

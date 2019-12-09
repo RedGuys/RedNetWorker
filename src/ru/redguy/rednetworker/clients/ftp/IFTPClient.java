@@ -46,4 +46,6 @@ public interface IFTPClient {
     public void appendFile(String remoteFile, InputStream inputStream, boolean async) throws ConnectionException, UnknownServerErrorException, AbortedException;
 
     public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException;
+
+    public String[] runCommand(String command, String args) throws ConnectionException, UnknownServerErrorException;
 }
