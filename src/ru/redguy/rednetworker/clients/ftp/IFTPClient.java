@@ -3,6 +3,7 @@ package ru.redguy.rednetworker.clients.ftp;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public interface IFTPClient {
@@ -41,4 +42,8 @@ public interface IFTPClient {
     public void rename(String oldPath, String newPath) throws ConnectionException, UnknownServerErrorException;
 
     public void disconnect() throws ConnectionException, UnknownServerErrorException;
+
+    public void appendFile(String remoteFile, InputStream inputStream, boolean async) throws ConnectionException, UnknownServerErrorException, AbortedException;
+
+    public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException;
 }

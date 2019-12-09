@@ -12,6 +12,7 @@ public class ApacheFTPClient implements IFTPClient {
     private String host;
     private int port;
     private String user;
+    private String pass;
 
     public ApacheFTPClient() {
         client = new FTPClient();
@@ -36,6 +37,7 @@ public class ApacheFTPClient implements IFTPClient {
     @Override
     public void login(String login, String password) throws AuthorizationException, ConnectionException, UnknownServerErrorException {
         this.user = login;
+        this.pass = password;
         try {
             client.login(login, password);
         } catch (IOException e) {
@@ -209,7 +211,28 @@ public class ApacheFTPClient implements IFTPClient {
         try {
             client.disconnect();
         } catch (IOException e) {
-            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
         }
     }
+
+    @Override
+    public void appendFile(String remoteFile, InputStream inputStream, boolean async) throws ConnectionException {
+        try {
+            client.appendFile(remoteFile, inputStream);
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
+
+    @Override
+    public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException {
+        try {
+            client.logout();
+            client.login(this.user,this.pass,account);
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
+
+
 }

@@ -7,6 +7,7 @@ import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Ftp4jFTPClient implements IFTPClient {
@@ -234,6 +235,38 @@ public class Ftp4jFTPClient implements IFTPClient {
         try {
             client.disconnect(true);
         } catch (IOException|FTPException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        } catch (FTPIllegalReplyException e) {
+            throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+    }
+
+    @Override
+    public void appendFile(String remoteFile, InputStream inputStream, boolean async) throws ConnectionException, UnknownServerErrorException, AbortedException {
+        Ftp4jListener ftp4jListener = new Ftp4jListener();
+        try {
+            client.append(remoteFile, inputStream, 0,ftp4jListener);
+            if(!async) {
+                while (!ftp4jListener.finish) {
+                    Thread.sleep(100);
+                }
+            }
+        } catch (IOException | FTPException | FTPDataTransferException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        } catch (FTPIllegalReplyException e) {
+            throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        } catch (FTPAbortedException e) {
+            throw new AbortedException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        } catch (InterruptedException ignored) {
+
+        }
+    }
+
+    @Override
+    public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException {
+        try {
+            client.changeAccount(account);
+        } catch (IOException | FTPException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         } catch (FTPIllegalReplyException e) {
             throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
