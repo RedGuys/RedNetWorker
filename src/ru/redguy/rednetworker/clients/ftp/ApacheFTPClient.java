@@ -242,4 +242,25 @@ public class ApacheFTPClient implements IFTPClient {
             throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
         }
     }
+
+    @Override
+    public void changeLocalTransferMode(TransferMode transferMode) {
+        switch (transferMode) {
+            case ACTIVE:
+                client.enterLocalActiveMode();
+                break;
+            case PASSIVE:
+                client.enterLocalPassiveMode();
+                break;
+        }
+    }
+
+    @Override
+    public String getStatus() throws ConnectionException {
+        try {
+            return client.getStatus();
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
 }

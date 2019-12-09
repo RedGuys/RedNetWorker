@@ -48,4 +48,8 @@ public interface IFTPClient {
     public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException;
 
     public String[] runCommand(String command, String args) throws ConnectionException, UnknownServerErrorException;
+
+    public void changeLocalTransferMode(TransferMode transferMode);
+
+    public String getStatus() throws ConnectionException, UnknownServerErrorException;
 }
