@@ -7,4 +7,9 @@ public class File {
     public DataTime lastEditDate = new DataTime();
     public long size;
     public String server;
+    public String owner;
+    public String group;
+    public boolean isDirectory;
+    public boolean isLink;
+    public boolean isFile;
 }

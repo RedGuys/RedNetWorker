@@ -318,4 +318,19 @@ public class Ftp4jFTPClient implements IFTPClient {
             throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
     }
+
+    @Override
+    public String getServerHelp() throws ConnectionException, UnknownServerErrorException {
+        try {
+            StringBuilder builder = new StringBuilder();
+            for(String s : client.help()) {
+                builder.append(s).append("\n");
+            }
+            return builder.toString();
+        } catch (IOException | FTPException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        } catch (FTPIllegalReplyException e) {
+            throw new UnknownServerErrorException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+    }
 }

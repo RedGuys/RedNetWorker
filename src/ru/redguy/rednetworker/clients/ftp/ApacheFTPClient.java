@@ -92,6 +92,9 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
         } catch (IOException e) {
@@ -114,6 +117,9 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
         } catch (IOException e) {
@@ -262,5 +268,145 @@ public class ApacheFTPClient implements IFTPClient {
         } catch (IOException e) {
             throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
         }
+    }
+
+    @Override
+    public String getSystemType() throws ConnectionException {
+        try {
+            return client.getSystemType();
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
+
+    @Override
+    public String getServerHelp() throws ConnectionException {
+        try {
+            return client.listHelp();
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(), this.host, this.port, this.user, e.getCause());
+        }
+    }
+
+    @Override
+    public FTPFile[] listDirs(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        try {
+            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
+                FTPFile myftpfile = new FTPFile();
+                myftpfile.server = this.host+":"+this.port;
+                myftpfile.name = ftpFile.getName();
+                myftpfile.path = ftpFile.getLink();
+                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.createDate = null;
+                myftpfile.size = ftpFile.getSize();
+                myftpfile.owner = ftpFile.getUser();
+                myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
+                files.add(myftpfile);
+            }
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+        return files.toArray(new FTPFile[0]);
+    }
+
+    @Override
+    public FTPFile[] listDirs() throws ConnectionException, AbortedException, UnknownServerErrorException {
+        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        try {
+            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {
+                FTPFile myftpfile = new FTPFile();
+                myftpfile.server = this.host+":"+this.port;
+                myftpfile.name = ftpFile.getName();
+                myftpfile.path = ftpFile.getLink();
+                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.size = ftpFile.getSize();
+                myftpfile.owner = ftpFile.getUser();
+                myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
+                files.add(myftpfile);
+            }
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+        return files.toArray(new FTPFile[0]);
+    }
+
+    @Override
+    public FTPFile mtdmFile(String file) throws ConnectionException {
+        try {
+            FTPFile myFtpFile = new FTPFile();
+            org.apache.commons.net.ftp.FTPFile remoteFtpFile = client.mdtmFile(file);
+            myFtpFile.server = this.host+":"+this.port;
+            myFtpFile.name = remoteFtpFile.getName();
+            myFtpFile.path = remoteFtpFile.getLink();
+            myFtpFile.lastEditDate = new DataTime(remoteFtpFile.getTimestamp());
+            myFtpFile.createDate = new DataTime(remoteFtpFile.getTimestamp());
+            myFtpFile.size = remoteFtpFile.getSize();
+            myFtpFile.owner = remoteFtpFile.getUser();
+            myFtpFile.group = remoteFtpFile.getGroup();
+            myFtpFile.isDirectory = remoteFtpFile.isDirectory();
+            myFtpFile.isFile = remoteFtpFile.isFile();
+            myFtpFile.isLink = remoteFtpFile.isSymbolicLink();
+            return myFtpFile;
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+    }
+
+    @Override
+    public FTPFile[] mlist(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        try {
+            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
+                FTPFile myftpfile = new FTPFile();
+                myftpfile.server = this.host+":"+this.port;
+                myftpfile.name = ftpFile.getName();
+                myftpfile.path = ftpFile.getLink();
+                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.createDate = null;
+                myftpfile.size = ftpFile.getSize();
+                myftpfile.owner = ftpFile.getUser();
+                myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
+                files.add(myftpfile);
+            }
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+        return files.toArray(new FTPFile[0]);
+    }
+
+    @Override
+    public FTPFile[] mlist() throws ConnectionException, AbortedException, UnknownServerErrorException {
+        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        try {
+            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {
+                FTPFile myftpfile = new FTPFile();
+                myftpfile.server = this.host+":"+this.port;
+                myftpfile.name = ftpFile.getName();
+                myftpfile.path = ftpFile.getLink();
+                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
+                myftpfile.size = ftpFile.getSize();
+                myftpfile.owner = ftpFile.getUser();
+                myftpfile.group = ftpFile.getGroup();
+                myftpfile.isDirectory = ftpFile.isDirectory();
+                myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isLink = ftpFile.isSymbolicLink();
+                files.add(myftpfile);
+            }
+        } catch (IOException e) {
+            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
+        }
+        return files.toArray(new FTPFile[0]);
     }
 }

@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
+import ru.redguy.rednetworker.Utils.NotImplementedException;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 
 import java.io.FileNotFoundException;
@@ -51,4 +52,30 @@ public interface IFTPClient {
     public void changeLocalTransferMode(TransferMode transferMode);
 
     public String getStatus() throws ConnectionException, UnknownServerErrorException;
+
+    public default String getSystemType() throws ConnectionException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public String getServerHelp() throws ConnectionException, UnknownServerErrorException;
+
+    public default FTPFile[] listDirs(String path) throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public default FTPFile[] listDirs() throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public default FTPFile mtdmFile(String file) throws ConnectionException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public default FTPFile[] mlist(String path) throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public default FTPFile[] mlist() throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+        throw new NotImplementedException();
+    }
 }
