@@ -75,7 +75,9 @@ public class JschSFTPClient implements ISFTPClient {
             }
             return null;
         } catch (SftpException e) {
-            throw new ServerMethodErrorException(e.getMessage(),this.host,this.port,e.getCause());
+            throw new ServerMethodErrorException(e.getMessage(), this.host, this.port, e.getCause());
         }
     }
+
+
 }
