@@ -97,7 +97,7 @@ public class Ftp4jFTPClient implements IFTPClient {
                 file.createDate = null;
                 file.path = ftpFile.getLink();
                 file.name = ftpFile.getName();
-                file.server = this.host;
+                file.server = this.host+":"+this.port;
                 files.add(file);
             }
         } catch (IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException e) {
