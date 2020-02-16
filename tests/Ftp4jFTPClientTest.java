@@ -12,7 +12,7 @@ public class Ftp4jFTPClientTest {
         ftp4jFTPClient.connect("speedtest.tele2.net");
         ftp4jFTPClient.loginAnonymous();
         FTPFile[] files = ftp4jFTPClient.list();
-        if(files.length == 18) {
+        if(files.length == 19) {
             Logger.info("list - ok!");
         } else {
             Logger.error("list - error");
