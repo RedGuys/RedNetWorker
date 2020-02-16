@@ -8,6 +8,7 @@ import java.io.File;
 public class Ftp4jFTPClientTest {
     public static void main(String[] args) throws Exception {
         Ftp4jFTPClient ftp4jFTPClient = new Ftp4jFTPClient();
+        ftp4jFTPClient.remoteRenameBlockFix = true;
         ftp4jFTPClient.connect("speedtest.tele2.net");
         ftp4jFTPClient.loginAnonymous();
         FTPFile[] files = ftp4jFTPClient.list();
@@ -31,7 +32,6 @@ public class Ftp4jFTPClientTest {
             Logger.error("cd - error");
             throw new Exception("Illegal result");
         }
-        ftp4jFTPClient.remoteRenameBlockFix = true;
         ftp4jFTPClient.uploadFile("Ftp4jFTPClientTest.test","downloaded.zip");
         Logger.info("upload - ok!");
     }

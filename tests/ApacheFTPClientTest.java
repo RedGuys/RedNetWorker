@@ -10,7 +10,7 @@ public class ApacheFTPClientTest {
         apacheFTPClient.connect("speedtest.tele2.net");
         apacheFTPClient.loginAnonymous();
         FTPFile[] files = apacheFTPClient.list();
-        if(files.length == 18) {
+        if(files.length == 19) {
             Logger.info("list - ok!");
         } else {
             Logger.error("list - error");
