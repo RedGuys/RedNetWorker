@@ -1,11 +1,14 @@
 package ru.redguy.rednetworker.clients.sftp;
 
+import ru.redguy.rednetworker.Utils.DataTime;
+import ru.redguy.rednetworker.clients.ftp.FTPFile;
 import ru.redguy.rednetworker.clients.sftp.exceptions.OpenConnectionException;
 import ru.redguy.rednetworker.clients.sftp.exceptions.ServerMethodErrorException;
 import com.jcraft.jsch.*;
 import ru.redguy.rednetworker.clients.sftp.utils.Passphrase;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class JschSFTPClient implements ISFTPClient {
@@ -87,21 +90,54 @@ public class JschSFTPClient implements ISFTPClient {
         }
     }
 
-    public SFTPFile ls() throws ServerMethodErrorException {
-        return ls();
+    public SFTPFile[] ls() throws ServerMethodErrorException {
+        return ls(getWorkingDirectory());
     }
 
-    public SFTPFile ls(String path) throws ServerMethodErrorException {
+    public SFTPFile[] ls(String path) throws ServerMethodErrorException {
         try {
+            ArrayList<SFTPFile> result = new ArrayList<>();
             Vector files = channelSftp.ls(path);
-            for (Object file : files) {
-                System.out.println(file);
+            for (Object rawFile : files) {
+                ChannelSftp.LsEntry file = (ChannelSftp.LsEntry)rawFile;
+                SFTPFile sftpFile = new SFTPFile();
+                sftpFile.name = file.getFilename();
+                sftpFile.path = getWorkingDirectory()+"/"+file.getFilename();
+                sftpFile.lastAccessDate = new DataTime(file.getAttrs().getATime());
+                sftpFile.lastEditDate = new DataTime(file.getAttrs().getMTime());
+                sftpFile.size = file.getAttrs().getSize();
+                sftpFile.server = this.host+":"+this.port;
+                result.add(sftpFile);
             }
-            return null;
+            return result.toArray(new SFTPFile[0]);
         } catch (SftpException e) {
             throw new ServerMethodErrorException(e.getMessage(), this.host, this.port, e.getCause());
         }
     }
 
+    public void mkdir(String name) throws ServerMethodErrorException {
+        try {
+            channelSftp.mkdir(name);
+        } catch (SftpException e) {
+            throw new ServerMethodErrorException(e.getMessage(), this.host, this.port, e.getCause());
+        }
+    }
 
+    @Override
+    public void rename(String oldPath, String newPath) throws ServerMethodErrorException {
+        try {
+            channelSftp.rename(oldPath,newPath);
+        } catch (SftpException e) {
+            throw new ServerMethodErrorException(e.getMessage(), this.host, this.port, e.getCause());
+        }
+    }
+
+    @Override
+    public void cd(String path) throws ServerMethodErrorException {
+        try {
+            channelSftp.cd(path);
+        } catch (SftpException e) {
+            throw new ServerMethodErrorException(e.getMessage(), this.host, this.port, e.getCause());
+        }
+    }
 }

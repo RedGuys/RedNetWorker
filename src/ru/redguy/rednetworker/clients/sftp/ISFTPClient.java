@@ -40,6 +40,9 @@ public interface ISFTPClient {
     public void connect(String host, int port, String user, File keyFile, Passphrase passphrase, String knownHostsFile) throws OpenConnectionException;
     public void setWorkingDirectory(String workingDirectory) throws ServerMethodErrorException;
     public String getWorkingDirectory() throws ServerMethodErrorException;
-    public SFTPFile ls() throws ServerMethodErrorException;
-    public SFTPFile ls(String path) throws ServerMethodErrorException;
+    public void cd(String path) throws ServerMethodErrorException;
+    public SFTPFile[] ls() throws ServerMethodErrorException;
+    public SFTPFile[] ls(String path) throws ServerMethodErrorException;
+    public void mkdir(String name) throws ServerMethodErrorException;
+    public void rename(String oldPath, String newPath) throws ServerMethodErrorException;
 }
