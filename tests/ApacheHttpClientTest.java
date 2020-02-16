@@ -22,7 +22,7 @@ public class ApacheHttpClientTest {
             Logger.error("post - error");
             Logger.error("Returned: "+result);
             throw new Exception("Illegal result");
-        }*/
+        }*/ //TODO: fix java.net.SocketException: Socket is closed
         /*result = apacheHttpClient.getString("https://api.redguy.ru/tests/get/", arg);
         if(result.equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("get - ok!");
@@ -30,7 +30,7 @@ public class ApacheHttpClientTest {
             Logger.error("get - error");
             Logger.error("Returned: "+result);
             throw new Exception("Illegal result");
-        }*/
+        }*/ //TODO: fix java.net.SocketException: Socket is closed
         File file = apacheHttpClient.downloadFile("https://api.redguy.ru/tests/get/", "ApacheHttpClient.test", arg);
         if(new BufferedReader(new FileReader(file)).readLine().equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("download - ok!");
