@@ -1,7 +1,7 @@
 package ru.redguy.rednetworker.clients.http;
 
 import org.apache.http.Header;
-import ru.redguy.rednetworker.Utils.NotImplementedException;
+import ru.redguy.rednetworker.utils.NotImplementedException;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 
 import java.io.File;

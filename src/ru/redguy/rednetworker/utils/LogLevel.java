@@ -1,4 +1,4 @@
-package ru.redguy.rednetworker.Utils;
+package ru.redguy.rednetworker.utils;
 
 @SuppressWarnings("unused")
 public enum LogLevel {

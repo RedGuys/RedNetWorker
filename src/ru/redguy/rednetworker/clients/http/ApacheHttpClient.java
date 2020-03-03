@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
-import ru.redguy.rednetworker.Utils.HttpUtils;
+import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -54,9 +54,7 @@ public class ApacheHttpClient implements IHttpClient {
         }
         req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
         if(headers.size() > 0) {
-            headers.forEach((value) -> {
-                req.setHeader(value);
-            });
+            headers.forEach(req::setHeader);
         }
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
@@ -168,16 +166,12 @@ public class ApacheHttpClient implements IHttpClient {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
         if(headers.size() > 0) {
-            headers.forEach((value) -> {
-                req.setHeader(value);
-            });
+            headers.forEach(req::setHeader);
         }
         List<NameValuePair> params = new ArrayList<>();
         if(postArgs != null) {
             List<NameValuePair> finalParams1 = params;
-            postArgs.forEach((name, value) ->{
-                finalParams1.add(new BasicNameValuePair(name, (String) value));
-            });
+            postArgs.forEach((name, value) -> finalParams1.add(new BasicNameValuePair(name, (String) value)));
             params = finalParams1;
         }
         try {
@@ -217,9 +211,7 @@ public class ApacheHttpClient implements IHttpClient {
         List<NameValuePair> params = new ArrayList<>();
         if(postArgs != null) {
             List<NameValuePair> finalParams1 = params;
-            postArgs.forEach((name, value) ->{
-                finalParams1.add(new BasicNameValuePair(name, (String) value));
-            });
+            postArgs.forEach((name, value) -> finalParams1.add(new BasicNameValuePair(name, (String) value)));
             params = finalParams1;
         }
         try {
@@ -314,6 +306,7 @@ public class ApacheHttpClient implements IHttpClient {
         return postString(url, null, (Map<String, Object>) null);
     }
 
+    @SuppressWarnings("ThrowFromFinallyBlock")
     @Override
     public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, InputStreamException {
         URL url;

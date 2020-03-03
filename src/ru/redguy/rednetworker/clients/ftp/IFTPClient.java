@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
-import ru.redguy.rednetworker.Utils.NotImplementedException;
+import ru.redguy.rednetworker.utils.NotImplementedException;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 
 import java.io.FileNotFoundException;

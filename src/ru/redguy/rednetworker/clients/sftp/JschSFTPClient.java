@@ -1,7 +1,6 @@
 package ru.redguy.rednetworker.clients.sftp;
 
-import ru.redguy.rednetworker.Utils.DataTime;
-import ru.redguy.rednetworker.clients.ftp.FTPFile;
+import ru.redguy.rednetworker.utils.DataTime;
 import ru.redguy.rednetworker.clients.sftp.exceptions.OpenConnectionException;
 import ru.redguy.rednetworker.clients.sftp.exceptions.ServerMethodErrorException;
 import com.jcraft.jsch.*;
@@ -98,7 +97,7 @@ public class JschSFTPClient implements ISFTPClient {
     public SFTPFile[] ls(String path) throws ServerMethodErrorException {
         try {
             ArrayList<SFTPFile> result = new ArrayList<>();
-            Vector files = channelSftp.ls(path);
+            @SuppressWarnings("rawtypes") Vector files = channelSftp.ls(path);
             for (Object rawFile : files) {
                 ChannelSftp.LsEntry file = (ChannelSftp.LsEntry)rawFile;
                 JschSFTPFile sftpFile = new JschSFTPFile();

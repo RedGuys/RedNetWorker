@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
-import ru.redguy.rednetworker.Utils.HttpUtils;
+import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
@@ -73,9 +73,7 @@ public class ApacheFluentAPI implements IHttpClient {
         List<NameValuePair> params = new ArrayList<>();
         if(postArgs != null) {
             List<NameValuePair> finalParams = params;
-            postArgs.forEach((name, value) ->{
-                finalParams.add(new BasicNameValuePair(name, (String) value));
-            });
+            postArgs.forEach((name, value) -> finalParams.add(new BasicNameValuePair(name, (String) value)));
             params = finalParams;
         }
         try {

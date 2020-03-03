@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
-import ru.redguy.rednetworker.Utils.DataTime;
+import ru.redguy.rednetworker.utils.DataTime;
 import it.sauronsoftware.ftp4j.*;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 public class Ftp4jFTPClient implements IFTPClient {
     public boolean remoteRenameBlockFix = false; //Fix problem with upload files to server where blocked file renaming
     private final it.sauronsoftware.ftp4j.FTPClient client;

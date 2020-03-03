@@ -1,13 +1,13 @@
 package ru.redguy.rednetworker.clients.http;
 
-import ru.redguy.rednetworker.Utils.HttpUtils;
+import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.Map;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 public class JavaNet implements IHttpClient {
     private Proxy proxy = null;
     public final int connectionTimeout = 5000;
@@ -182,7 +182,7 @@ public class JavaNet implements IHttpClient {
             throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
         }
         File file = new File(pathToFile);
-        FileOutputStream fis = null;
+        FileOutputStream fis;
         try {
             fis = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
@@ -190,7 +190,7 @@ public class JavaNet implements IHttpClient {
             fis = new FileOutputStream(file);
         }
         byte[] buffer = new byte[1024];
-        int count=0;
+        int count;
         try {
             while ((count = bis.read(buffer, 0, 1024)) != -1) {
                 fis.write(buffer, 0, count);

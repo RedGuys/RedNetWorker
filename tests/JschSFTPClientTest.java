@@ -1,4 +1,3 @@
-import ru.redguy.rednetworker.Utils.Logger;
 import ru.redguy.rednetworker.clients.sftp.JschSFTPClient;
 import ru.redguy.rednetworker.clients.sftp.exceptions.OpenConnectionException;
 import ru.redguy.rednetworker.clients.sftp.exceptions.ServerMethodErrorException;

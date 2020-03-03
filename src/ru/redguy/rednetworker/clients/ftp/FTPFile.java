@@ -1,7 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
-import ru.redguy.rednetworker.Utils.DataTime;
-import ru.redguy.rednetworker.Utils.File;
+import ru.redguy.rednetworker.utils.File;
 
 @SuppressWarnings("unused")
 public class FTPFile extends File {

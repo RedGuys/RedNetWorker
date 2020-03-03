@@ -1,4 +1,4 @@
-import ru.redguy.rednetworker.Utils.Logger;
+import ru.redguy.rednetworker.utils.Logger;
 import ru.redguy.rednetworker.clients.ftp.FTPFile;
 import ru.redguy.rednetworker.clients.ftp.Ftp4jFTPClient;
 

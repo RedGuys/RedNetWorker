@@ -1,11 +1,10 @@
 package ru.redguy.rednetworker.clients.ftp;
 
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
-import ru.redguy.rednetworker.Utils.DataTime;
+import ru.redguy.rednetworker.utils.DataTime;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
@@ -82,7 +81,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] list(String path) throws ConnectionException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        ArrayList<FTPFile> files = new ArrayList<>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles(path)) {
                 ApacheFTPFile myftpfile = new ApacheFTPFile();
@@ -129,7 +128,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public void uploadFile(String localPath, String remotePath) throws ConnectionException, FileNotFoundException {
-        FileInputStream fis = null;
+        FileInputStream fis;
         try {
             File file = new File(remotePath);
             client.allocate((int) file.length());
@@ -145,7 +144,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public void downloadFile(String localPath, String remotePath) throws FTPFileNotFoundException, ConnectionException {
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         try {
             fos = new FileOutputStream(localPath);
             client.retrieveFile(remotePath, fos);
@@ -289,7 +288,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] listDirs(String path) throws ConnectionException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        ArrayList<FTPFile> files = new ArrayList<>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
                 ApacheFTPFile myftpfile = new ApacheFTPFile();
@@ -375,7 +374,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] mlist(String path) throws ConnectionException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        ArrayList<FTPFile> files = new ArrayList<>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
                 ApacheFTPFile myftpfile = new ApacheFTPFile();
@@ -417,7 +416,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] mlist() throws ConnectionException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
+        ArrayList<FTPFile> files = new ArrayList<>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {
                 ApacheFTPFile myftpfile = new ApacheFTPFile();

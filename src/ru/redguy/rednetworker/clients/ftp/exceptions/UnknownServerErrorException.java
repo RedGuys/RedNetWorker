@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp.exceptions;
 
+@SuppressWarnings("unused")
 public class UnknownServerErrorException extends Exception {
     public UnknownServerErrorException() {super();}
     public UnknownServerErrorException(String message) {super(message);}

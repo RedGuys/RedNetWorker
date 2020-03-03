@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.http.exceptions;
 
+@SuppressWarnings("unused")
 public class URLException extends Exception {
     public URLException() {super();}
     public URLException(String message) {super(message);}
