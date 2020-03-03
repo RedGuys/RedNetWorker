@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.sftp.exceptions;
 
+@SuppressWarnings("unused")
 public class OpenConnectionException extends Exception {
     public OpenConnectionException() {super();}
     public OpenConnectionException(String message) {super(message);}

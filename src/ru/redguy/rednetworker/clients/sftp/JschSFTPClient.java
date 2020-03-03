@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
+@SuppressWarnings("unused")
 public class JschSFTPClient implements ISFTPClient {
     private String host;
     private String user;

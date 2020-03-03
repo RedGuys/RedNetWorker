@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class JavaNetTest {
     public static void main(String[] args) throws Exception {
         JavaNet javaNet = new JavaNet();

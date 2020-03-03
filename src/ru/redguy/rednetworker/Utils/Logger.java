@@ -2,6 +2,7 @@ package ru.redguy.rednetworker.Utils;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("unused")
 public class Logger {
     public static void info(Object text) {
         System.out.println(LocalDateTime.now()+" [info] "+text);
