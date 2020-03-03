@@ -154,7 +154,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
             url = new URL(uri+HttpUtils.buildGet(getArgs));
@@ -201,7 +201,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
             url = new URL(uri+HttpUtils.buildGet(getArgs));
@@ -243,27 +243,27 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri, postArgs,null, headers);
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri,postArgs, (Map<String, Object>) null);
     }
 
     @Override
-    public InputStream post(String uri, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri,null,null,headers);
     }
 
     @Override
-    public InputStream post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public InputStream post(String uri) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri, null, (Map<String, Object>) null);
     }
 
     @Override
-    public String postString(String url, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         InputStream stream = post(url, postArgs, getArgs, headers);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -279,7 +279,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         InputStream stream = post(url, postArgs, getArgs);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -295,27 +295,27 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public String postString(String url, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return postString(url, postArgs, null, headers);
     }
 
     @Override
-    public String postString(String url, Map<String, Object> postArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String, Object> postArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return postString(url, postArgs, (Map<String, Object>) null);
     }
 
     @Override
-    public String postString(String url, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return postString(url, null, null, headers);
     }
 
     @Override
-    public String postString(String url) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return postString(url, null, (Map<String, Object>) null);
     }
 
     @Override
-    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, FileNotFoundException, InputStreamException, OutputStreamException {
+    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, InputStreamException {
         URL url;
         try {
             url = new URL(uri + HttpUtils.buildGet(getArgs));
@@ -340,7 +340,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public File downloadFile(String uri, String pathToFile) throws FileNotFoundException, URLException, OutputStreamException, OpenConnectionException, InputStreamException {
+    public File downloadFile(String uri, String pathToFile) throws URLException, InputStreamException {
         return downloadFile(uri,pathToFile,null);
     }
 }

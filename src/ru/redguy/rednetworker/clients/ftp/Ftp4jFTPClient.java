@@ -151,7 +151,7 @@ public class Ftp4jFTPClient implements IFTPClient {
     }
 
     @Override
-    public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException, FileNotFoundException {
+    public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException {
         try {
             if(remoteRenameBlockFix) {
                 File file = new File(localPath);

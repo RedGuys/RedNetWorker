@@ -36,7 +36,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void login(String login, String password) throws AuthorizationException, ConnectionException, UnknownServerErrorException {
+    public void login(String login, String password) throws ConnectionException {
         this.user = login;
         this.pass = password;
         try {
@@ -47,7 +47,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void loginAnonymous(String email) throws AuthorizationException, ConnectionException, UnknownServerErrorException {
+    public void loginAnonymous(String email) throws ConnectionException {
         this.user = "anonymous";
         try {
             client.login("anonymous",email);
@@ -57,7 +57,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void loginAnonymous() throws AuthorizationException, ConnectionException, UnknownServerErrorException {
+    public void loginAnonymous() throws ConnectionException {
         loginAnonymous("anonymous@anonymous.com");
     }
 
@@ -80,7 +80,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] list(String path) throws ConnectionException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles(path)) {
@@ -122,12 +122,12 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] list() throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] list() throws ConnectionException {
         return list(this.getWorkingDirectory());
     }
 
     @Override
-    public void uploadFile(String localPath, String remotePath) throws ConnectionException, UnknownServerErrorException, AbortedException, FileNotFoundException {
+    public void uploadFile(String localPath, String remotePath) throws ConnectionException, FileNotFoundException {
         FileInputStream fis = null;
         try {
             File file = new File(remotePath);
@@ -143,7 +143,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void downloadFile(String localPath, String remotePath) throws FTPFileNotFoundException, ConnectionException, UnknownServerErrorException, AbortedException {
+    public void downloadFile(String localPath, String remotePath) throws FTPFileNotFoundException, ConnectionException {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(localPath);
@@ -157,7 +157,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void rmdir(String remotePath) throws ConnectionException, UnknownServerErrorException {
+    public void rmdir(String remotePath) throws ConnectionException {
         try {
             client.removeDirectory(remotePath);
         } catch (IOException e) {
@@ -166,7 +166,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void mkdir(String remotePath) throws ConnectionException, UnknownServerErrorException {
+    public void mkdir(String remotePath) throws ConnectionException {
         try {
             client.makeDirectory(remotePath);
         } catch (IOException e) {
@@ -175,7 +175,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void delete(String remotePath) throws ConnectionException, UnknownServerErrorException {
+    public void delete(String remotePath) throws ConnectionException {
         try {
             client.deleteFile(remotePath);
         } catch (IOException e) {
@@ -184,7 +184,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void cd(String remotePath) throws ConnectionException, UnknownServerErrorException {
+    public void cd(String remotePath) throws ConnectionException {
         try {
             client.changeWorkingDirectory(remotePath);
         } catch (IOException e) {
@@ -193,7 +193,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void logout() throws ConnectionException, UnknownServerErrorException {
+    public void logout() throws ConnectionException {
         try {
             client.logout();
         } catch (IOException e) {
@@ -202,7 +202,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void rename(String oldPath, String newPath) throws ConnectionException, UnknownServerErrorException {
+    public void rename(String oldPath, String newPath) throws ConnectionException {
         try {
             client.rename(oldPath, newPath);
         } catch (IOException e) {
@@ -211,7 +211,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void disconnect() throws ConnectionException, UnknownServerErrorException {
+    public void disconnect() throws ConnectionException {
         try {
             client.disconnect();
         } catch (IOException e) {
@@ -229,7 +229,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public void changeAccount(String account) throws ConnectionException, UnknownServerErrorException {
+    public void changeAccount(String account) throws ConnectionException {
         try {
             client.logout();
             client.login(this.user,this.pass,account);
@@ -287,7 +287,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] listDirs(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] listDirs(String path) throws ConnectionException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
@@ -329,7 +329,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] listDirs() throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] listDirs() throws ConnectionException {
         return listDirs(this.getWorkingDirectory());
     }
 
@@ -373,7 +373,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] mlist(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] mlist(String path) throws ConnectionException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
@@ -415,7 +415,7 @@ public class ApacheFTPClient implements IFTPClient {
     }
 
     @Override
-    public FTPFile[] mlist() throws ConnectionException, AbortedException, UnknownServerErrorException {
+    public FTPFile[] mlist() throws ConnectionException {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {

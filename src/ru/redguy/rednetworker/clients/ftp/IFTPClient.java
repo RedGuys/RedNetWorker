@@ -59,11 +59,11 @@ public interface IFTPClient {
 
     String getServerHelp() throws ConnectionException, UnknownServerErrorException;
 
-    default FTPFile[] listDirs(String path) throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+    default FTPFile[] listDirs(String path) throws ConnectionException, NotImplementedException {
         throw new NotImplementedException();
     }
 
-    default FTPFile[] listDirs() throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+    default FTPFile[] listDirs() throws ConnectionException, NotImplementedException {
         throw new NotImplementedException();
     }
 
@@ -71,11 +71,11 @@ public interface IFTPClient {
         throw new NotImplementedException();
     }
 
-    default FTPFile[] mlist(String path) throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+    default FTPFile[] mlist(String path) throws ConnectionException, NotImplementedException {
         throw new NotImplementedException();
     }
 
-    default FTPFile[] mlist() throws ConnectionException, AbortedException, UnknownServerErrorException, NotImplementedException {
+    default FTPFile[] mlist() throws ConnectionException, NotImplementedException {
         throw new NotImplementedException();
     }
 }

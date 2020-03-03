@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp.exceptions;
 
+@SuppressWarnings("unused")
 public class AbortedException extends Exception {
     public AbortedException() {super();}
     public AbortedException(String message) {super(message);}

@@ -35,7 +35,7 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public InputStream get(String uri) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
+    public InputStream get(String uri) throws URLException, OpenConnectionException {
         return get(uri, (Map<String, Object>) null);
     }
 
@@ -57,7 +57,7 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public String getString(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
+    public String getString(String url) throws URLException, OpenConnectionException {
         return getString(url, (Map<String, Object>) null);
     }
 
@@ -87,17 +87,17 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
         return post(uri, postArgs , (Map<String, Object>) null);
     }
 
     @Override
-    public InputStream post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public InputStream post(String uri) throws URLException, OpenConnectionException {
         return post(uri, null, (Map<String, Object>) null);
     }
 
     @Override
-    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
         InputStream stream = post(url, postArgs, getArgs);
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
@@ -113,17 +113,17 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public String postString(String url, Map<String, Object> postArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
         return postString(url, postArgs, (Map<String, Object>) null);
     }
 
     @Override
-    public String postString(String url) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
+    public String postString(String url) throws URLException, OpenConnectionException {
         return postString(url, null, (Map<String, Object>) null);
     }
 
     @Override
-    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, FileNotFoundException, InputStreamException, OutputStreamException, HttpProtocolException {
+    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException {
         URL url;
         try {
             url = new URL(uri + HttpUtils.buildGet(getArgs));
@@ -144,7 +144,7 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public File downloadFile(String uri, String pathToFile) throws FileNotFoundException, URLException, OutputStreamException, OpenConnectionException, InputStreamException, HttpProtocolException {
+    public File downloadFile(String uri, String pathToFile) throws URLException, OpenConnectionException, HttpProtocolException {
         return downloadFile(uri, pathToFile, null);
     }
 }

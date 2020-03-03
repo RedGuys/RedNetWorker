@@ -35,37 +35,37 @@ public interface IHttpClient {
 
     String getString(String uri) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException;
 
-    default InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
+    default InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
     InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException;
 
-    default InputStream post(String uri, Map<String, Object> postArgs, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
+    default InputStream post(String uri, Map<String, Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
     InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException;
 
-    default InputStream post(String uri, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
+    default InputStream post(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
     InputStream post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException;
 
-    default String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException, NotImplementedException {
+    default String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
     String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException;
 
-    default String postString(String uri, Map<String, Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException, NotImplementedException {
+    default String postString(String uri, Map<String, Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
     String postString(String uri, Map<String, Object> postArgs) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException;
 
-    default String postString(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException, NotImplementedException {
+    default String postString(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
 
