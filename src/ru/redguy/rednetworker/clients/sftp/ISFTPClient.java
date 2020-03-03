@@ -6,6 +6,7 @@ import ru.redguy.rednetworker.clients.sftp.utils.Passphrase;
 
 import java.io.File;
 
+@SuppressWarnings("unused")
 public interface ISFTPClient {
     default void connect(String host, String user, String password) throws OpenConnectionException
     {

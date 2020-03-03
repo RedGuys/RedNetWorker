@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class JavaNet implements IHttpClient {
     private Proxy proxy = null;
     public final int connectionTimeout = 5000;

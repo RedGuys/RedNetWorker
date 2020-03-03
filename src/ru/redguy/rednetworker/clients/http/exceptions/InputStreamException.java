@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.http.exceptions;
 
+@SuppressWarnings("unused")
 public class InputStreamException extends Exception {
     public InputStreamException() {super();}
     public InputStreamException(String message) {super(message);}

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class ApacheFluentAPI implements IHttpClient {
     @Override
     public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {

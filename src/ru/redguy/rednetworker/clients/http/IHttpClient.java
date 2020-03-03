@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public interface IHttpClient {
     default InputStream get(String uri, Map<String, Object> args, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException, NotImplementedException {
         throw new NotImplementedException();
