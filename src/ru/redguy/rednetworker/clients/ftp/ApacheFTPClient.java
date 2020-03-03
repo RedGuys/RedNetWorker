@@ -5,6 +5,7 @@ import ru.redguy.rednetworker.Utils.DataTime;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ApacheFTPClient implements IFTPClient {
@@ -98,6 +99,20 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.isUnknown = ftpFile.isUnknown();
                 myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        myftpfile.type = ApacheFTPFileType.FILE;
+                        break;
+                    case 1:
+                        myftpfile.type = ApacheFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
+                        break;
+                    case 3:
+                        myftpfile.type = ApacheFTPFileType.UNKNOWN;
+                        break;
+                }
                 files.add(myftpfile);
             }
         } catch (IOException e) {
@@ -291,6 +306,20 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.isUnknown = ftpFile.isUnknown();
                 myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        myftpfile.type = ApacheFTPFileType.FILE;
+                        break;
+                    case 1:
+                        myftpfile.type = ApacheFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
+                        break;
+                    case 3:
+                        myftpfile.type = ApacheFTPFileType.UNKNOWN;
+                        break;
+                }
                 files.add(myftpfile);
             }
         } catch (IOException e) {
@@ -323,6 +352,20 @@ public class ApacheFTPClient implements IFTPClient {
             myftpfile.isUnknown = ftpFile.isUnknown();
             myftpfile.isValid = ftpFile.isValid();
             myftpfile.isLink = ftpFile.isSymbolicLink();
+            switch (ftpFile.getType()) {
+                case 0:
+                    myftpfile.type = ApacheFTPFileType.FILE;
+                    break;
+                case 1:
+                    myftpfile.type = ApacheFTPFileType.DIRECTORY;
+                    break;
+                case 2:
+                    myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
+                    break;
+                case 3:
+                    myftpfile.type = ApacheFTPFileType.UNKNOWN;
+                    break;
+            }
             return myftpfile;
         } catch (IOException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
@@ -349,6 +392,20 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.isUnknown = ftpFile.isUnknown();
                 myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        myftpfile.type = ApacheFTPFileType.FILE;
+                        break;
+                    case 1:
+                        myftpfile.type = ApacheFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
+                        break;
+                    case 3:
+                        myftpfile.type = ApacheFTPFileType.UNKNOWN;
+                        break;
+                }
                 files.add(myftpfile);
             }
         } catch (IOException e) {
@@ -377,6 +434,20 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.isUnknown = ftpFile.isUnknown();
                 myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        myftpfile.type = ApacheFTPFileType.FILE;
+                        break;
+                    case 1:
+                        myftpfile.type = ApacheFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
+                        break;
+                    case 3:
+                        myftpfile.type = ApacheFTPFileType.UNKNOWN;
+                        break;
+                }
                 files.add(myftpfile);
             }
         } catch (IOException e) {

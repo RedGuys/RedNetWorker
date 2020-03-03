@@ -1,6 +1,7 @@
 package ru.redguy.rednetworker.Utils;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DataTime {
     public final int year;
@@ -22,6 +23,19 @@ public class DataTime {
     }
 
     public DataTime(long unixTimestamp) {
+        Calendar mydate = Calendar.getInstance();
+        mydate.setTimeInMillis(unixTimestamp*1000L);
+        this.unixTimestamp = unixTimestamp;
+        this.year = mydate.get(Calendar.YEAR);
+        this.month = mydate.get(Calendar.MONTH);
+        this.day = mydate.get(Calendar.DAY_OF_MONTH);
+        this.hour = mydate.get(Calendar.HOUR);
+        this.minute = mydate.get(Calendar.MINUTE);
+        this.second = mydate.get(Calendar.SECOND);
+    }
+
+    public DataTime(Date date) {
+        long unixTimestamp = date.getTime();
         Calendar mydate = Calendar.getInstance();
         mydate.setTimeInMillis(unixTimestamp*1000L);
         this.unixTimestamp = unixTimestamp;

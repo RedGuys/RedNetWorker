@@ -85,19 +85,26 @@ public class Ftp4jFTPClient implements IFTPClient {
     }
 
     @Override
-    public ru.redguy.rednetworker.clients.ftp.FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
-        ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> files = new ArrayList<>();
+    public FTPFile[] list(String path) throws ConnectionException, AbortedException, UnknownServerErrorException {
+        ArrayList<FTPFile> files = new ArrayList<>();
         try {
             for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.client.list(path)) {
-                ru.redguy.rednetworker.clients.ftp.FTPFile file = new ru.redguy.rednetworker.clients.ftp.FTPFile();
-                file.group = null;
-                file.owner = null;
-                file.size = ftpFile.getSize();
-                file.lastEditDate = new DataTime(ftpFile.getModifiedDate().getTime() / 1000L);
-                file.createDate = null;
-                file.path = ftpFile.getLink();
+                Ftp4jFTPFile file = new Ftp4jFTPFile();
+                file.link = ftpFile.getLink();
+                file.lastEditDate = new DataTime(ftpFile.getModifiedDate());
                 file.name = ftpFile.getName();
-                file.server = this.host+":"+this.port;
+                file.size = ftpFile.getSize();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        file.type = Ftp4jFTPFileType.FILE;
+                        break;
+                    case 1:
+                        file.type = Ftp4jFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        file.type = Ftp4jFTPFileType.LINK;
+                        break;
+                }
                 files.add(file);
             }
         } catch (IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException e) {
@@ -115,15 +122,22 @@ public class Ftp4jFTPClient implements IFTPClient {
         ArrayList<ru.redguy.rednetworker.clients.ftp.FTPFile> files = new ArrayList<>();
         try {
             for (it.sauronsoftware.ftp4j.FTPFile ftpFile : this.client.list()) {
-                ru.redguy.rednetworker.clients.ftp.FTPFile file = new ru.redguy.rednetworker.clients.ftp.FTPFile();
-                file.group = null;
-                file.owner = null;
-                file.size = ftpFile.getSize();
-                file.lastEditDate = new DataTime(ftpFile.getModifiedDate().getTime() / 1000L);
-                file.createDate = null;
-                file.path = ftpFile.getLink();
+                Ftp4jFTPFile file = new Ftp4jFTPFile();
+                file.link = ftpFile.getLink();
+                file.lastEditDate = new DataTime(ftpFile.getModifiedDate());
                 file.name = ftpFile.getName();
-                file.server = this.host;
+                file.size = ftpFile.getSize();
+                switch (ftpFile.getType()) {
+                    case 0:
+                        file.type = Ftp4jFTPFileType.FILE;
+                        break;
+                    case 1:
+                        file.type = Ftp4jFTPFileType.DIRECTORY;
+                        break;
+                    case 2:
+                        file.type = Ftp4jFTPFileType.LINK;
+                        break;
+                }
                 files.add(file);
             }
         } catch (IOException | FTPIllegalReplyException | FTPException | FTPDataTransferException e) {
