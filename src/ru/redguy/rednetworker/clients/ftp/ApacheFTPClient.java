@@ -90,7 +90,6 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
                 myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = null;
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
@@ -109,27 +108,7 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] list() throws ConnectionException, AbortedException, UnknownServerErrorException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
-        try {
-            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles()) {
-                FTPFile myftpfile = new FTPFile();
-                myftpfile.server = this.host+":"+this.port;
-                myftpfile.name = ftpFile.getName();
-                myftpfile.path = ftpFile.getLink();
-                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.size = ftpFile.getSize();
-                myftpfile.owner = ftpFile.getUser();
-                myftpfile.group = ftpFile.getGroup();
-                myftpfile.isDirectory = ftpFile.isDirectory();
-                myftpfile.isFile = ftpFile.isFile();
-                myftpfile.isLink = ftpFile.isSymbolicLink();
-                files.add(myftpfile);
-            }
-        } catch (IOException e) {
-            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
-        }
-        return files.toArray(new FTPFile[0]);
+        return list(this.getWorkingDirectory());
     }
 
     @Override
@@ -297,17 +276,20 @@ public class ApacheFTPClient implements IFTPClient {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
-                FTPFile myftpfile = new FTPFile();
+                ApacheFTPFile myftpfile = new ApacheFTPFile();
+                myftpfile.link = ftpFile.getLink();
+                myftpfile.hardLinkCount = ftpFile.getHardLinkCount();
                 myftpfile.server = this.host+":"+this.port;
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
                 myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = null;
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
                 myftpfile.isDirectory = ftpFile.isDirectory();
                 myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isUnknown = ftpFile.isUnknown();
+                myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
@@ -319,46 +301,29 @@ public class ApacheFTPClient implements IFTPClient {
 
     @Override
     public FTPFile[] listDirs() throws ConnectionException, AbortedException, UnknownServerErrorException {
-        ArrayList<FTPFile> files = new ArrayList<FTPFile>();
-        try {
-            for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {
-                FTPFile myftpfile = new FTPFile();
-                myftpfile.server = this.host+":"+this.port;
-                myftpfile.name = ftpFile.getName();
-                myftpfile.path = ftpFile.getLink();
-                myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.size = ftpFile.getSize();
-                myftpfile.owner = ftpFile.getUser();
-                myftpfile.group = ftpFile.getGroup();
-                myftpfile.isDirectory = ftpFile.isDirectory();
-                myftpfile.isFile = ftpFile.isFile();
-                myftpfile.isLink = ftpFile.isSymbolicLink();
-                files.add(myftpfile);
-            }
-        } catch (IOException e) {
-            throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
-        }
-        return files.toArray(new FTPFile[0]);
+        return listDirs(this.getWorkingDirectory());
     }
 
     @Override
     public FTPFile mtdmFile(String file) throws ConnectionException {
         try {
-            FTPFile myFtpFile = new FTPFile();
-            org.apache.commons.net.ftp.FTPFile remoteFtpFile = client.mdtmFile(file);
-            myFtpFile.server = this.host+":"+this.port;
-            myFtpFile.name = remoteFtpFile.getName();
-            myFtpFile.path = remoteFtpFile.getLink();
-            myFtpFile.lastEditDate = new DataTime(remoteFtpFile.getTimestamp());
-            myFtpFile.createDate = new DataTime(remoteFtpFile.getTimestamp());
-            myFtpFile.size = remoteFtpFile.getSize();
-            myFtpFile.owner = remoteFtpFile.getUser();
-            myFtpFile.group = remoteFtpFile.getGroup();
-            myFtpFile.isDirectory = remoteFtpFile.isDirectory();
-            myFtpFile.isFile = remoteFtpFile.isFile();
-            myFtpFile.isLink = remoteFtpFile.isSymbolicLink();
-            return myFtpFile;
+            org.apache.commons.net.ftp.FTPFile ftpFile = client.mdtmFile(file);
+            ApacheFTPFile myftpfile = new ApacheFTPFile();
+            myftpfile.link = ftpFile.getLink();
+            myftpfile.hardLinkCount = ftpFile.getHardLinkCount();
+            myftpfile.server = this.host+":"+this.port;
+            myftpfile.name = ftpFile.getName();
+            myftpfile.path = ftpFile.getLink();
+            myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
+            myftpfile.size = ftpFile.getSize();
+            myftpfile.owner = ftpFile.getUser();
+            myftpfile.group = ftpFile.getGroup();
+            myftpfile.isDirectory = ftpFile.isDirectory();
+            myftpfile.isFile = ftpFile.isFile();
+            myftpfile.isUnknown = ftpFile.isUnknown();
+            myftpfile.isValid = ftpFile.isValid();
+            myftpfile.isLink = ftpFile.isSymbolicLink();
+            return myftpfile;
         } catch (IOException e) {
             throw new ConnectionException(e.getMessage(),this.host,this.port,this.user,e.getCause());
         }
@@ -369,17 +334,20 @@ public class ApacheFTPClient implements IFTPClient {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories(path)) {
-                FTPFile myftpfile = new FTPFile();
+                ApacheFTPFile myftpfile = new ApacheFTPFile();
+                myftpfile.link = ftpFile.getLink();
+                myftpfile.hardLinkCount = ftpFile.getHardLinkCount();
                 myftpfile.server = this.host+":"+this.port;
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
                 myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = null;
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
                 myftpfile.isDirectory = ftpFile.isDirectory();
                 myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isUnknown = ftpFile.isUnknown();
+                myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
@@ -394,17 +362,20 @@ public class ApacheFTPClient implements IFTPClient {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listDirectories()) {
-                FTPFile myftpfile = new FTPFile();
+                ApacheFTPFile myftpfile = new ApacheFTPFile();
+                myftpfile.link = ftpFile.getLink();
+                myftpfile.hardLinkCount = ftpFile.getHardLinkCount();
                 myftpfile.server = this.host+":"+this.port;
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
                 myftpfile.lastEditDate = new DataTime(ftpFile.getTimestamp());
-                myftpfile.createDate = new DataTime(ftpFile.getTimestamp());
                 myftpfile.size = ftpFile.getSize();
                 myftpfile.owner = ftpFile.getUser();
                 myftpfile.group = ftpFile.getGroup();
                 myftpfile.isDirectory = ftpFile.isDirectory();
                 myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isUnknown = ftpFile.isUnknown();
+                myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
