@@ -83,7 +83,9 @@ public class ApacheFTPClient implements IFTPClient {
         ArrayList<FTPFile> files = new ArrayList<FTPFile>();
         try {
             for (org.apache.commons.net.ftp.FTPFile ftpFile : client.listFiles(path)) {
-                FTPFile myftpfile = new FTPFile();
+                ApacheFTPFile myftpfile = new ApacheFTPFile();
+                myftpfile.link = ftpFile.getLink();
+                myftpfile.hardLinkCount = ftpFile.getHardLinkCount();
                 myftpfile.server = this.host+":"+this.port;
                 myftpfile.name = ftpFile.getName();
                 myftpfile.path = ftpFile.getLink();
@@ -94,6 +96,8 @@ public class ApacheFTPClient implements IFTPClient {
                 myftpfile.group = ftpFile.getGroup();
                 myftpfile.isDirectory = ftpFile.isDirectory();
                 myftpfile.isFile = ftpFile.isFile();
+                myftpfile.isUnknown = ftpFile.isUnknown();
+                myftpfile.isValid = ftpFile.isValid();
                 myftpfile.isLink = ftpFile.isSymbolicLink();
                 files.add(myftpfile);
             }
