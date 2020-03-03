@@ -3,6 +3,7 @@ package ru.redguy.rednetworker.Utils;
 import java.util.Calendar;
 import java.util.Date;
 
+@SuppressWarnings("unused")
 public class DataTime {
     public final int year;
     public final int month;

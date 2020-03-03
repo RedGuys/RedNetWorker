@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp.exceptions;
 
+@SuppressWarnings("unused")
 public class ConnectionException extends Exception{
     public ConnectionException() {super();}
     public ConnectionException(String message) {super(message);}

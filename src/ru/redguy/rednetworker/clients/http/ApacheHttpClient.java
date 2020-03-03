@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class ApacheHttpClient implements IHttpClient {
     private Proxy proxy = null;
     public final int connectionTimeout = 5000;

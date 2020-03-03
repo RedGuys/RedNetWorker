@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp.exceptions;
 
+@SuppressWarnings("unused")
 public class AuthorizationException extends Exception {
     public AuthorizationException() {super();}
     public AuthorizationException(String message) {super(message);}

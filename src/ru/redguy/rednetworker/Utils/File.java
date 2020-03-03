@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.Utils;
 
+@SuppressWarnings("unused")
 public class File {
     public String name;
     public String path;

@@ -14,7 +14,7 @@ public class ApacheHttpClientTest {
         arg.put("eng","hi");
         arg.put("rus","ку");
         arg.put("num","19");
-        String result;
+        @SuppressWarnings("unused") String result;
         /*result = apacheHttpClient.postString("https://api.redguy.ru/tests/post/",arg);
         if(result.equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("post - ok!");
