@@ -100,7 +100,7 @@ public class JschSFTPClient implements ISFTPClient {
             Vector files = channelSftp.ls(path);
             for (Object rawFile : files) {
                 ChannelSftp.LsEntry file = (ChannelSftp.LsEntry)rawFile;
-                SFTPFile sftpFile = new SFTPFile();
+                JschSFTPFile sftpFile = new JschSFTPFile();
                 sftpFile.name = file.getFilename();
                 sftpFile.path = getWorkingDirectory()+"/"+file.getFilename();
                 sftpFile.lastAccessDate = new DataTime(file.getAttrs().getATime());

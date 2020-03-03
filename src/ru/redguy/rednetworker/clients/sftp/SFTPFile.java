@@ -4,5 +4,5 @@ import ru.redguy.rednetworker.Utils.DataTime;
 import ru.redguy.rednetworker.Utils.File;
 
 public class SFTPFile extends File {
-    public DataTime lastAccessDate = new DataTime();
+
 }
