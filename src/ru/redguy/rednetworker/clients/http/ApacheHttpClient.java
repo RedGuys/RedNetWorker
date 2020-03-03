@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ApacheHttpClient implements IHttpClient {
     private Proxy proxy = null;
-    public int connectionTimeout = 5000;
+    public final int connectionTimeout = 5000;
     public int readTimeout = 5000;
 
     public ApacheHttpClient() {
@@ -51,11 +52,7 @@ public class ApacheHttpClient implements IHttpClient {
         } catch (URISyntaxException e) {
             throw new URLException(e.getMessage(),url.toString(),e.getCause());
         }
-        if(proxy != null) {
-            req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
-        } else {
-            req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
-        }
+        req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
         if(headers.size() > 0) {
             headers.forEach((value) -> {
                 req.setHeader(value);
@@ -89,11 +86,7 @@ public class ApacheHttpClient implements IHttpClient {
         } catch (URISyntaxException e) {
             throw new URLException(e.getMessage(),url.toString(),e.getCause());
         }
-        if(proxy != null) {
-            req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
-        } else {
-            req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
-        }
+        req.setConfig(RequestConfig.custom().setConnectTimeout(this.connectionTimeout).setSocketTimeout(this.connectionTimeout).setConnectionRequestTimeout(this.connectionTimeout).build());
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
             try {
@@ -334,8 +327,7 @@ public class ApacheHttpClient implements IHttpClient {
                 .build();
         try {
             HttpGet get = new HttpGet(url.toURI()); // we're using GET but it could be via POST as well
-            File downloaded = httpclient.execute(get, new FileDownloadResponseHandler(new File(pathToFile)));
-            return downloaded;
+            return httpclient.execute(get, new FileDownloadResponseHandler(new File(pathToFile)));
         } catch (Exception e) {
             throw new IllegalStateException(e);
         } finally {

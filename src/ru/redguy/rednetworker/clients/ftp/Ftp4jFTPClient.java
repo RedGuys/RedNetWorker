@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Ftp4jFTPClient implements IFTPClient {
     public boolean remoteRenameBlockFix = false; //Fix problem with upload files to server where blocked file renaming
-    private it.sauronsoftware.ftp4j.FTPClient client;
+    private final it.sauronsoftware.ftp4j.FTPClient client;
     private String host;
     private int port;
     private String user;

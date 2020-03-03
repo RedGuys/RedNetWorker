@@ -9,7 +9,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ApacheFTPClient implements IFTPClient {
-    private org.apache.commons.net.ftp.FTPClient client;
+    private final org.apache.commons.net.ftp.FTPClient client;
     private String host;
     private int port;
     private String user;

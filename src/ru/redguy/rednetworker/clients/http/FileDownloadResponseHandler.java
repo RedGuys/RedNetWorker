@@ -13,7 +13,7 @@ public class FileDownloadResponseHandler implements ResponseHandler<File> {
         this.target = target;
     }
 
-    public File handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public File handleResponse(HttpResponse response) throws IOException {
         BufferedInputStream source = new BufferedInputStream(response.getEntity().getContent());
         FileOutputStream fis = new FileOutputStream(this.target);
         byte[] buffer = new byte[1024];

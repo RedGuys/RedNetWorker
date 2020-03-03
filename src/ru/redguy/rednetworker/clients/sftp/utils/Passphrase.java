@@ -1,7 +1,7 @@
 package ru.redguy.rednetworker.clients.sftp.utils;
 
 public class Passphrase {
-    private String passphrase;
+    private final String passphrase;
     public Passphrase(String passphrase) {
         this.passphrase = passphrase;
     }

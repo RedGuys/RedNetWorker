@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ApacheFluentAPI implements IHttpClient {
     @Override
-    public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
+    public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
         URL url;
         try {
             url = new URL(uri+ HttpUtils.buildGet(args));
@@ -40,7 +40,7 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public String getString(String uri, Map<String, Object> args) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
+    public String getString(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
         URL url;
         try {
             url = new URL(uri+ HttpUtils.buildGet(args));
@@ -62,7 +62,7 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
+    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
         URL url;
         try {
             url = new URL(uri+HttpUtils.buildGet(getArgs));

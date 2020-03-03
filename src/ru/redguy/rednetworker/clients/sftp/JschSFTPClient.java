@@ -16,7 +16,7 @@ public class JschSFTPClient implements ISFTPClient {
     private String user;
     private int port;
 
-    private JSch jsch;
+    private final JSch jsch;
     private Session jschSession;
     private ChannelSftp channelSftp;
 

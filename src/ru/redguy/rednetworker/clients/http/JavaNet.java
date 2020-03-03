@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class JavaNet implements IHttpClient {
     private Proxy proxy = null;
-    public int connectionTimeout = 5000;
-    public int readTimeout = 5000;
+    public final int connectionTimeout = 5000;
+    public final int readTimeout = 5000;
 
     public JavaNet() {
 
