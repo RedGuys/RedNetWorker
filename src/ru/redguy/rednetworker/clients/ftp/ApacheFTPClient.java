@@ -8,6 +8,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class ApacheFTPClient implements IFTPClient {
     private final org.apache.commons.net.ftp.FTPClient client;
     private String host;

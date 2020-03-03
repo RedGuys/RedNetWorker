@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp.exceptions;
 
+@SuppressWarnings("unused")
 public class FTPFileNotFoundException extends Exception {
     public FTPFileNotFoundException() {super();}
     public FTPFileNotFoundException(String message) {super(message);}

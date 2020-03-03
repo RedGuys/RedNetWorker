@@ -6,6 +6,7 @@ import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+@SuppressWarnings("unused")
 public interface IFTPClient {
     void connect(String host, int port) throws OpenConnectionException;
 
