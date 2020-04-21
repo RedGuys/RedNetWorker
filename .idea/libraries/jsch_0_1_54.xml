@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/jsch-0.1.54.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/jsch-0.1.54-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

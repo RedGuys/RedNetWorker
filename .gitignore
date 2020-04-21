@@ -1,4 +1,6 @@
-tests/
 out/
+.idea/
 
 *.class
+*.test
+downloaded.zip
