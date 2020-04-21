@@ -1,6 +1,6 @@
-import RedNetWorker.Clients.HttpClient.ApacheHttpClient;
-import RedNetWorker.Clients.HttpClient.JavaNet;
-import RedNetWorker.Utils.Logger;
+import ru.redguy.rednetworker.clients.http.ApacheHttpClient;
+import ru.redguy.rednetworker.clients.http.JavaNet;
+import ru.redguy.rednetworker.utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class JavaNetTest {
     public static void main(String[] args) throws Exception {
         JavaNet javaNet = new JavaNet();

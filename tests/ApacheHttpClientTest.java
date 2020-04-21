@@ -1,5 +1,5 @@
-import RedNetWorker.Clients.HttpClient.ApacheHttpClient;
-import RedNetWorker.Utils.Logger;
+import ru.redguy.rednetworker.clients.http.ApacheHttpClient;
+import ru.redguy.rednetworker.utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ public class ApacheHttpClientTest {
         arg.put("eng","hi");
         arg.put("rus","ку");
         arg.put("num","19");
-        String result;
+        @SuppressWarnings("unused") String result;
         /*result = apacheHttpClient.postString("https://api.redguy.ru/tests/post/",arg);
         if(result.equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("post - ok!");
@@ -22,7 +22,7 @@ public class ApacheHttpClientTest {
             Logger.error("post - error");
             Logger.error("Returned: "+result);
             throw new Exception("Illegal result");
-        }*/
+        }*/ //TODO: fix java.net.SocketException: Socket is closed
         /*result = apacheHttpClient.getString("https://api.redguy.ru/tests/get/", arg);
         if(result.equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("get - ok!");
@@ -30,7 +30,7 @@ public class ApacheHttpClientTest {
             Logger.error("get - error");
             Logger.error("Returned: "+result);
             throw new Exception("Illegal result");
-        }*/
+        }*/ //TODO: fix java.net.SocketException: Socket is closed
         File file = apacheHttpClient.downloadFile("https://api.redguy.ru/tests/get/", "ApacheHttpClient.test", arg);
         if(new BufferedReader(new FileReader(file)).readLine().equals("rus=ку-num=19-eng=hi-")) {
             Logger.info("download - ok!");

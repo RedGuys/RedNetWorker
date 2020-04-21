@@ -1,6 +1,5 @@
-import RedNetWorker.Clients.HttpClient.ApacheFluentAPI;
-import RedNetWorker.Clients.HttpClient.HttpExceptions.*;
-import RedNetWorker.Utils.Logger;
+import ru.redguy.rednetworker.clients.http.ApacheFluentAPI;
+import ru.redguy.rednetworker.utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
