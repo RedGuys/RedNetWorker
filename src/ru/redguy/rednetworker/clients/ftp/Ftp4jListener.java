@@ -1,4 +1,4 @@
-package ru.redguy.rednetworker.clients.ftp.exceptions;
+package ru.redguy.rednetworker.clients.ftp;
 
 import it.sauronsoftware.ftp4j.FTPDataTransferListener;
 
