@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.redguy'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":clients:ftp")
+    compile project(":clients:http")
+    compile project(":clients:sftp")
+    compile project(":clients:tftp")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

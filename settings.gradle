@@ -1,2 +1,12 @@
 rootProject.name = 'RedNetWorker'
+include 'utils'
+include 'clients'
+include 'clients:ftp'
+findProject(':clients:ftp')?.name = 'ftp'
+include 'clients:http'
+findProject(':clients:http')?.name = 'http'
+include 'clients:sftp'
+findProject(':clients:sftp')?.name = 'sftp'
+include 'clients:tftp'
+findProject(':clients:tftp')?.name = 'tftp'
 

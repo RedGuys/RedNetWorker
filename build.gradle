@@ -15,10 +15,6 @@ repositories {
 }
 
 dependencies {
-    compile files('libs/ftp4j-1.7.2.jar')
-    compile group: 'commons-net', name: 'commons-net', version: '3.6'
-    compile 'org.apache.httpcomponents:httpclient:4.5.12'
-    compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.6'
-    compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
+    compile project(":clients")
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
