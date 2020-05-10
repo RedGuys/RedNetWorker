@@ -6,6 +6,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.utils.Protocols;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -22,7 +23,7 @@ public class ApacheFluentAPI implements IHttpClient {
     public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
         URL url;
         try {
-            url = new URL(uri+ HttpUtils.buildGet(args));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -44,7 +45,7 @@ public class ApacheFluentAPI implements IHttpClient {
     public String getString(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
         URL url;
         try {
-            url = new URL(uri+ HttpUtils.buildGet(args));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -96,18 +97,25 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
-        InputStream stream = post(url, postArgs, getArgs);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return null;
+    public String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
+        URL url;
+        try {
+            url = new URL(uri+HttpUtils.buildGet(getArgs));
+        } catch (MalformedURLException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        }
+        List<NameValuePair> params = new ArrayList<>();
+        if(postArgs != null) {
+            List<NameValuePair> finalParams = params;
+            postArgs.forEach((name, value) -> finalParams.add(new BasicNameValuePair(name, (String) value)));
+            params = finalParams;
+        }
+        try {
+            return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asString(); //TODO: add auto redirect on 302 code
+        } catch (URISyntaxException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        } catch (IOException e) {
+            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
         }
     }
 
