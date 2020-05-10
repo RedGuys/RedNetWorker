@@ -14,15 +14,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.utils.Protocols;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class ApacheHttpClient implements IHttpClient {
@@ -42,7 +41,7 @@ public class ApacheHttpClient implements IHttpClient {
     public InputStream get(String uri, Map<String, Object> args, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
         URL url;
         try {
-            url = new URL(uri+ HttpUtils.buildGet(args));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -74,7 +73,7 @@ public class ApacheHttpClient implements IHttpClient {
     public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
         URL url;
         try {
-            url = new URL(uri+ HttpUtils.buildGet(args));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -128,17 +127,21 @@ public class ApacheHttpClient implements IHttpClient {
     @Override
     public String getString(String url, Map<String, Object> args) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
         InputStream stream = get(url, args);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
-                content.append(inputLine);
+        final int bufferSize = 1024;
+        final char[] buffer = new char[bufferSize];
+        final StringBuilder out = new StringBuilder();
+        try(Reader in = new InputStreamReader(stream)) {
+            for (; ; ) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0)
+                    break;
+                out.append(buffer, 0, rsz);
             }
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return "";
+            return out.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return out.toString();
     }
 
     @Override
@@ -155,7 +158,7 @@ public class ApacheHttpClient implements IHttpClient {
     public InputStream post(String uri, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
-            url = new URL(uri+HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -198,7 +201,7 @@ public class ApacheHttpClient implements IHttpClient {
     public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
-            url = new URL(uri+HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -276,9 +279,11 @@ public class ApacheHttpClient implements IHttpClient {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
-                content.append(inputLine);
-            }
+            try {
+                while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
+                    content.append(inputLine);
+                }
+            } catch (SocketException ignored) {}
             return content.toString();
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -311,7 +316,7 @@ public class ApacheHttpClient implements IHttpClient {
     public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, InputStreamException {
         URL url;
         try {
-            url = new URL(uri + HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }

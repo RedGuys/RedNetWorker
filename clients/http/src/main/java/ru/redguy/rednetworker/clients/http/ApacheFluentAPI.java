@@ -67,7 +67,7 @@ public class ApacheFluentAPI implements IHttpClient {
     public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
         URL url;
         try {
-            url = new URL(uri+HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -100,7 +100,7 @@ public class ApacheFluentAPI implements IHttpClient {
     public String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
         URL url;
         try {
-            url = new URL(uri+HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
@@ -133,7 +133,7 @@ public class ApacheFluentAPI implements IHttpClient {
     public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException {
         URL url;
         try {
-            url = new URL(uri + HttpUtils.buildGet(getArgs));
+            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
         } catch (MalformedURLException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
