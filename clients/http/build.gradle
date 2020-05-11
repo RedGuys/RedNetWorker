@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     compile project(":utils")
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'
+    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.2.0'
     compile 'org.apache.httpcomponents:httpclient:4.5.12'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.6'
     testCompile group: 'junit', name: 'junit', version: '4.12'
