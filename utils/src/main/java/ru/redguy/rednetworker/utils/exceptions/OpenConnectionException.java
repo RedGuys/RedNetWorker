@@ -1,4 +1,4 @@
-package ru.redguy.rednetworker.clients.tftp.exeptions;
+package ru.redguy.rednetworker.utils.exceptions;
 
 @SuppressWarnings("unused")
 public class OpenConnectionException extends Exception {

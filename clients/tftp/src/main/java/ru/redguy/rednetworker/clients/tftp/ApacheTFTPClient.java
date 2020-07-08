@@ -4,7 +4,7 @@ import org.apache.commons.net.tftp.TFTP;
 import org.apache.commons.net.tftp.TFTPClient;
 import ru.redguy.rednetworker.clients.tftp.enums.TransferMode;
 import ru.redguy.rednetworker.clients.tftp.exeptions.FileTransferException;
-import ru.redguy.rednetworker.clients.tftp.exeptions.OpenConnectionException;
+import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.*;
 import java.net.InetAddress;

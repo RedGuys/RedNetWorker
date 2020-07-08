@@ -5,6 +5,7 @@ import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
 import ru.redguy.rednetworker.utils.DataTime;
 import org.apache.commons.net.ftp.FTPClient;
+import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.*;
 import java.util.ArrayList;

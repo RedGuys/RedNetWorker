@@ -1,10 +1,10 @@
 package ru.redguy.rednetworker.clients.sftp;
 
 import ru.redguy.rednetworker.utils.DataTime;
-import ru.redguy.rednetworker.clients.sftp.exceptions.OpenConnectionException;
 import ru.redguy.rednetworker.clients.sftp.exceptions.ServerMethodErrorException;
 import com.jcraft.jsch.*;
 import ru.redguy.rednetworker.clients.sftp.utils.Passphrase;
+import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.File;
 import java.util.ArrayList;

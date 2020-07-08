@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.redguy.rednetworker.clients.ftp'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":clients:ftp:common")
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

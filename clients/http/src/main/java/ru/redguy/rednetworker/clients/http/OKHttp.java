@@ -9,7 +9,6 @@ import org.apache.http.Header;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
-import sun.misc.IOUtils;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -11,6 +11,10 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 dependencies {
     compile project(":utils")
     compile group: 'com.google.code.gson', name: 'gson', version: '1.7.2'

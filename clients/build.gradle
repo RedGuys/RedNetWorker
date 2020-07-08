@@ -11,6 +11,10 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 dependencies {
     compile project(":clients:ftp")
     compile project(":clients:http")

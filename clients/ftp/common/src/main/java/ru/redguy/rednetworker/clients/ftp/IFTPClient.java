@@ -3,6 +3,7 @@ package ru.redguy.rednetworker.clients.ftp;
 import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
 import ru.redguy.rednetworker.utils.NotImplementedException;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
+import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

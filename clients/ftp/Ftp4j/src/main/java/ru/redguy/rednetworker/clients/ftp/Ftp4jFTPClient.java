@@ -5,6 +5,7 @@ import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
 import ru.redguy.rednetworker.utils.DataTime;
 import it.sauronsoftware.ftp4j.*;
 import ru.redguy.rednetworker.clients.ftp.exceptions.*;
+import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
