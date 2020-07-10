@@ -20,7 +20,7 @@ public class HttpUtils {
             StringBuilder stringBuilder = new StringBuilder();
             args.forEach((name, value) -> {
                 try {
-                    stringBuilder.append(URLEncoder.encode(name, "UTF-8")).append('=').append(URLEncoder.encode((String) value, "UTF-8")).append('&');
+                    stringBuilder.append(URLEncoder.encode(name, "UTF-8")).append('=').append(URLEncoder.encode(String.valueOf(value), "UTF-8")).append('&');
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
