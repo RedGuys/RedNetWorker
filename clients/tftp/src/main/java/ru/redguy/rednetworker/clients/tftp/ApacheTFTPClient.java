@@ -17,7 +17,7 @@ public class ApacheTFTPClient implements ITFTPClient {
     InetAddress inetAddress;
     int port;
 
-    ApacheTFTPClient() {
+    public ApacheTFTPClient() {
         tftpClient = new TFTPClient();
     }
 
