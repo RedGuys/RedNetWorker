@@ -17,4 +17,3 @@ include 'clients:ftp:Ftp4j'
 findProject(':clients:ftp:Ftp4j')?.name = 'Ftp4j'
 include 'clients:ftp:Ftp4j'
 findProject(':clients:ftp:Ftp4j')?.name = 'Ftp4j'
-
