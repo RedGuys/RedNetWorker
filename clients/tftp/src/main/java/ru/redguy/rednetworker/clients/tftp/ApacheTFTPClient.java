@@ -30,8 +30,9 @@ public class ApacheTFTPClient implements ITFTPClient {
         }
         this.port = port;
         try {
-            tftpClient.open(port,inetAddress);
+            tftpClient.open(port+1);
         } catch (SocketException e) {
+            e.printStackTrace();
             throw new OpenConnectionException(e.getMessage(),host,port,e.getCause());
         }
     }
@@ -70,6 +71,7 @@ public class ApacheTFTPClient implements ITFTPClient {
                 try {
                     tftpClient.receiveFile(filename,TFTP.BINARY_MODE,outputStream,inetAddress,port);
                 } catch (IOException e) {
+                    e.printStackTrace();
                     throw new FileTransferException(e.getMessage(),inetAddress.getHostAddress(),port,e.getCause());
                 }
                 break;
