@@ -5,3 +5,6 @@ out/
 *.test
 downloaded.zip
 /.gradle/
+*.css
+*.html
+*.js
