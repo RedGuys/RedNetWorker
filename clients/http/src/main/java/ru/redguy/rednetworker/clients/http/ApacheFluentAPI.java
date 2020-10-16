@@ -1,11 +1,13 @@
 package ru.redguy.rednetworker.clients.http;
 
+import org.apache.http.entity.ContentType;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.utils.NotImplementedException;
 import ru.redguy.rednetworker.utils.Protocols;
 
 import java.io.*;
@@ -94,6 +96,23 @@ public class ApacheFluentAPI implements IHttpClient {
     @Override
     public InputStream post(String uri) throws URLException, OpenConnectionException {
         return post(uri, null, (Map<String, Object>) null);
+    }
+
+    @Override
+    public void post(String uri, String data) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
+        URL url;
+        try {
+            url = new URL(Protocols.formatUrlString(uri,"http"));
+        } catch (MalformedURLException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        }
+        try {
+            Request.Post(url.toURI()).bodyString(data, ContentType.APPLICATION_JSON).execute(); //TODO: add auto redirect on 302 code
+        } catch (URISyntaxException e) {
+            throw new URLException(e.getMessage(),uri,e.getCause());
+        } catch (IOException e) {
+            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
+        }
     }
 
     @Override

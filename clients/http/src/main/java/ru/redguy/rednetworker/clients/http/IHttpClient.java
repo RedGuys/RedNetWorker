@@ -42,6 +42,10 @@ public interface IHttpClient {
 
     InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException;
 
+    default void post(String uri, String data) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
+        throw new NotImplementedException();
+    }
+
     default InputStream post(String uri, Map<String, Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException, NotImplementedException {
         throw new NotImplementedException();
     }
