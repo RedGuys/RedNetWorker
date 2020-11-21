@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface IHttpResponse {
-    public String getString() throws HttpProtocolException, InputStreamException;
+    public String getString() throws HttpProtocolException, InputStreamException, IOException;
 
     public InputStream getInputStream() throws HttpProtocolException, InputStreamException;
 
