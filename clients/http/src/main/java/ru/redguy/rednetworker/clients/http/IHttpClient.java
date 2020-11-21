@@ -7,11 +7,22 @@ import ru.redguy.rednetworker.clients.http.exceptions.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
 @SuppressWarnings("unused")
 public interface IHttpClient {
+
+    IHttpClient method(HttpMethod httpMethod);
+
+    IHttpClient url(String url);
+
+    IHttpClient getParams(Map<String, Object> params);
+
+    IHttpResponse execute();
+
     default IHttpResponse get(String uri, Map<String, Object> args, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException, NotImplementedException {
         throw new NotImplementedException();
     }

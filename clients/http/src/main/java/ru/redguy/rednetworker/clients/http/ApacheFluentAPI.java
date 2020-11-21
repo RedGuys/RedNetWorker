@@ -16,31 +16,69 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
 public class ApacheFluentAPI implements IHttpClient {
-    @Override
-    public ApacheFluentAPIResponse get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        try {
-            return new ApacheFluentAPIResponse(Request.Get(url.toURI()).execute());
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
+
+    private HttpMethod httpMethod = HttpMethod.GET;
+    private String url = null;
+    private Map<String, Object> getParams = new HashMap<>();
+
+    ApacheFluentAPI() {
+
+    }
+
+    ApacheFluentAPI(String url) {
+        this.url = url;
     }
 
     @Override
-    public ApacheFluentAPIResponse get(String uri) throws URLException, OpenConnectionException {
-        return get(uri, (Map<String, Object>) null);
+    public IHttpClient method(HttpMethod httpMethod) {
+        this.httpMethod = httpMethod;
+        return this;
+    }
+
+    @Override
+    public IHttpClient url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    @Override
+    public IHttpClient getParams(Map<String, Object> params) {
+        this.getParams = params;
+        return this;
+    }
+
+    @Override
+    public IHttpResponse execute() {
+        switch (httpMethod) {
+            case GET:
+                return get();
+                break;
+            case POST:
+
+                break;
+        }
+    }
+
+    private IHttpResponse get() throws URLException, OpenConnectionException {
+        URL url = null;
+        try {
+            url = new URL(Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams));
+        } catch (MalformedURLException e) {
+            throw new URLException(e.getMessage(),this.url,e.getCause());
+        }
+        try {
+            return new ApacheFluentAPIResponse(Request.Get(url.toURI()).execute());
+        } catch (IOException e) {
+            throw new OpenConnectionException(e.getMessage(),this.url,e.getCause());
+        } catch (URISyntaxException e) {
+            throw new URLException(e.getMessage(),this.url,e.getCause());
+        }
     }
 
     @Override
