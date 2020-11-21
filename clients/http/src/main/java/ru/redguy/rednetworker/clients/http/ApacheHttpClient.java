@@ -38,7 +38,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream get(String uri, Map<String, Object> args, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
+    public ApacheHttpClientResponse get(String uri, Map<String, Object> args, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
@@ -58,7 +58,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
             try {
-                return response.getEntity().getContent();
+                return new ApacheHttpClientResponse(response.getEntity().getContent());
             } catch (IOException e) {
                 throw new InputStreamException(e.getMessage(),uri,e.getCause());
             }
@@ -70,7 +70,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
+    public ApacheHttpClientResponse get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
@@ -87,7 +87,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
             try {
-                return response.getEntity().getContent();
+                return new ApacheHttpClientResponse(response.getEntity().getContent());
             } catch (IOException e) {
                 throw new InputStreamException(e.getMessage(),uri,e.getCause());
             }
@@ -99,63 +99,17 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream get(String uri, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
+    public ApacheHttpClientResponse get(String uri, ArrayList<Header> headers) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
         return get(uri, null, headers);
     }
 
     @Override
-    public InputStream get(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
+    public ApacheHttpClientResponse get(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
         return get(url, (Map<String, Object>) null);
     }
 
     @Override
-    public String getString(String url, Map<String,Object> args, ArrayList<Header> headers) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        InputStream stream = get(url, args, headers);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return "";
-        }
-    }
-
-    @Override
-    public String getString(String url, Map<String, Object> args) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        InputStream stream = get(url, args);
-        final int bufferSize = 1024;
-        final char[] buffer = new char[bufferSize];
-        final StringBuilder out = new StringBuilder();
-        try(Reader in = new InputStreamReader(stream)) {
-            for (; ; ) {
-                int rsz = in.read(buffer, 0, buffer.length);
-                if (rsz < 0)
-                    break;
-                out.append(buffer, 0, rsz);
-            }
-            return out.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return out.toString();
-    }
-
-    @Override
-    public String getString(String url, ArrayList<Header> headers) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        return getString(url, null, headers);
-    }
-
-    @Override
-    public String getString(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        return getString(url, (Map<String, Object>) null);
-    }
-
-    @Override
-    public InputStream post(String uri, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
@@ -185,7 +139,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
             try {
-                return response.getEntity().getContent();
+                return new ApacheHttpClientResponse(response.getEntity().getContent());
             } catch (IOException e) {
                 throw new InputStreamException(e.getMessage(),uri,e.getCause());
             }
@@ -198,7 +152,7 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
@@ -225,7 +179,7 @@ public class ApacheHttpClient implements IHttpClient {
         try (CloseableHttpClient client = HttpClients.createDefault();
              CloseableHttpResponse response = client.execute(req) ) {
             try {
-                return response.getEntity().getContent();
+                return new ApacheHttpClientResponse(response.getEntity().getContent());
             } catch (IOException e) {
                 throw new InputStreamException(e.getMessage(),uri,e.getCause());
             }
@@ -238,107 +192,22 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri, postArgs,null, headers);
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri, Map<String, Object> postArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri,postArgs, (Map<String, Object>) null);
     }
 
     @Override
-    public InputStream post(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri,null,null,headers);
     }
 
     @Override
-    public InputStream post(String uri) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
+    public ApacheHttpClientResponse post(String uri) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
         return post(uri, null, (Map<String, Object>) null);
-    }
-
-    @Override
-    public String postString(String url, Map<String,Object> postArgs, Map<String,Object> getArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        InputStream stream = post(url, postArgs, getArgs, headers);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return "";
-        }
-    }
-
-    @Override
-    public String postString(String url, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        InputStream stream = post(url, postArgs, getArgs);
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(stream))) {
-            String inputLine;
-            final StringBuilder content = new StringBuilder();
-            try {
-                while ((inputLine = in.readLine()) != null) { //TODO: java.net.SocketException: Socket is closed
-                    content.append(inputLine);
-                }
-            } catch (SocketException ignored) {}
-            return content.toString();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
-            return "";
-        }
-    }
-
-    @Override
-    public String postString(String url, Map<String,Object> postArgs, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        return postString(url, postArgs, null, headers);
-    }
-
-    @Override
-    public String postString(String url, Map<String, Object> postArgs) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        return postString(url, postArgs, (Map<String, Object>) null);
-    }
-
-    @Override
-    public String postString(String url, ArrayList<Header> headers) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        return postString(url, null, null, headers);
-    }
-
-    @Override
-    public String postString(String url) throws URLException, HttpProtocolException, InputStreamException, EncodingException {
-        return postString(url, null, (Map<String, Object>) null);
-    }
-
-    @SuppressWarnings("ThrowFromFinallyBlock")
-    @Override
-    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, InputStreamException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        CloseableHttpClient httpclient = HttpClients.custom()
-                .setRedirectStrategy(new LaxRedirectStrategy()) // adds HTTP REDIRECT support to GET and POST methods
-                .build();
-        try {
-            HttpGet get = new HttpGet(url.toURI()); // we're using GET but it could be via POST as well
-            return httpclient.execute(get, new FileDownloadResponseHandler(new File(pathToFile)));
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        } finally {
-            try {
-                httpclient.close();
-            } catch (IOException e) {
-                throw new InputStreamException(e.getMessage(),uri,e.getCause());
-            }
-        }
-    }
-
-    @Override
-    public File downloadFile(String uri, String pathToFile) throws URLException, InputStreamException {
-        return downloadFile(uri,pathToFile,null);
     }
 }
