@@ -22,7 +22,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class ApacheFluentAPI implements IHttpClient {
     @Override
-    public InputStream get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
+    public ApacheFluentAPIResponse get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
@@ -30,7 +30,7 @@ public class ApacheFluentAPI implements IHttpClient {
             throw new URLException(e.getMessage(),uri,e.getCause());
         }
         try {
-            return Request.Get(url.toURI()).execute().returnContent().asStream();
+            return new ApacheFluentAPIResponse(Request.Get(url.toURI()).execute());
         } catch (URISyntaxException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         } catch (IOException e) {
@@ -39,34 +39,12 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public InputStream get(String uri) throws URLException, OpenConnectionException {
+    public ApacheFluentAPIResponse get(String uri) throws URLException, OpenConnectionException {
         return get(uri, (Map<String, Object>) null);
     }
 
     @Override
-    public String getString(String uri, Map<String, Object> args) throws URLException, OpenConnectionException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        try {
-            return Request.Get(url.toURI()).execute().returnContent().asString();
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
-    }
-
-    @Override
-    public String getString(String url) throws URLException, OpenConnectionException {
-        return getString(url, (Map<String, Object>) null);
-    }
-
-    @Override
-    public InputStream post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
+    public ApacheFluentAPIResponse post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
         URL url;
         try {
             url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
@@ -80,7 +58,7 @@ public class ApacheFluentAPI implements IHttpClient {
             params = finalParams;
         }
         try {
-            return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asStream(); //TODO: fix error with 301 HTTP code
+            return new ApacheFluentAPIResponse(Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute()); //TODO: fix error with 301 HTTP code
         } catch (URISyntaxException e) {
             throw new URLException(e.getMessage(),uri,e.getCause());
         } catch (IOException e) {
@@ -89,88 +67,12 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public InputStream post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
+    public ApacheFluentAPIResponse post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
         return post(uri, postArgs , (Map<String, Object>) null);
     }
 
     @Override
-    public InputStream post(String uri) throws URLException, OpenConnectionException {
+    public ApacheFluentAPIResponse post(String uri) throws URLException, OpenConnectionException {
         return post(uri, null, (Map<String, Object>) null);
-    }
-
-    @Override
-    public void post(String uri, String data) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException, NotImplementedException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http"));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        try {
-            Request.Post(url.toURI()).bodyString(data, ContentType.APPLICATION_JSON).execute(); //TODO: add auto redirect on 302 code
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
-    }
-
-    @Override
-    public String postString(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        List<NameValuePair> params = new ArrayList<>();
-        if(postArgs != null) {
-            List<NameValuePair> finalParams = params;
-            postArgs.forEach((name, value) -> finalParams.add(new BasicNameValuePair(name, (String) value)));
-            params = finalParams;
-        }
-        try {
-            return Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute().returnContent().asString(); //TODO: add auto redirect on 302 code
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
-    }
-
-    @Override
-    public String postString(String url, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
-        return postString(url, postArgs, (Map<String, Object>) null);
-    }
-
-    @Override
-    public String postString(String url) throws URLException, OpenConnectionException {
-        return postString(url, null, (Map<String, Object>) null);
-    }
-
-    @Override
-    public File downloadFile(String uri, String pathToFile, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        File file = new File(pathToFile);
-        try {
-            Request.Get(url.toURI()).execute().saveContent(file);
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
-        return file;
-    }
-
-    @Override
-    public File downloadFile(String uri, String pathToFile) throws URLException, OpenConnectionException, HttpProtocolException {
-        return downloadFile(uri, pathToFile, null);
     }
 }

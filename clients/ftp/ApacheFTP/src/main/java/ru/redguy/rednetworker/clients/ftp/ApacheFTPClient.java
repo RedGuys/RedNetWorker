@@ -10,7 +10,6 @@ import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 import java.io.*;
 import java.util.ArrayList;
 
-@SuppressWarnings("unused")
 public class ApacheFTPClient implements IFTPClient {
     private final org.apache.commons.net.ftp.FTPClient client;
     private String host;

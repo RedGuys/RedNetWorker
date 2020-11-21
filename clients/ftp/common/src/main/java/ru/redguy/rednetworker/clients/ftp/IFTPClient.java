@@ -8,11 +8,12 @@ import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-@SuppressWarnings("unused")
 public interface IFTPClient {
-    void connect(String host, int port) throws OpenConnectionException;
+    IFTPConnection connect(String host, int port) throws OpenConnectionException;
 
-    void connect(String host) throws OpenConnectionException;
+    IFTPConnection connect(String host) throws OpenConnectionException;
+
+    
 
     void login(String login, String password) throws AuthorizationException, ConnectionException, UnknownServerErrorException;
 
