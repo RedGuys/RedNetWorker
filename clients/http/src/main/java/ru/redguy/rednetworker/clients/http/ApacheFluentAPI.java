@@ -26,6 +26,11 @@ public class ApacheFluentAPI implements IHttpClient {
     private HttpMethod httpMethod = HttpMethod.GET;
     private String url = null;
     private Map<String, Object> getParams = new HashMap<>();
+    private Map<String, Object> postParams = new HashMap<>();
+    private String body = "";
+    private boolean isParamsBody = true;
+    private Charset charset = Charset.defaultCharset();
+    private String contentType = "text/plain";
 
     ApacheFluentAPI() {
 
@@ -36,81 +41,79 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public IHttpClient method(HttpMethod httpMethod) {
+    public ApacheFluentAPI method(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
         return this;
     }
 
     @Override
-    public IHttpClient url(String url) {
+    public ApacheFluentAPI url(String url) {
         this.url = url;
         return this;
     }
 
     @Override
-    public IHttpClient getParams(Map<String, Object> params) {
+    public ApacheFluentAPI setGetParams(Map<String, Object> params) {
         this.getParams = params;
         return this;
     }
 
     @Override
-    public IHttpResponse execute() {
+    public ApacheFluentAPI setPostParams(Map<String, Object> params) {
+        isParamsBody = true;
+        postParams = params;
+        return this;
+    }
+
+    @Override
+    public ApacheFluentAPI setPostBody(String body) {
+        isParamsBody = false;
+        this.body = body;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setCharset(Charset charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    @Override
+    public ApacheFluentAPIResponse execute() throws HttpProtocolException, IOException {
         switch (httpMethod) {
             case GET:
                 return get();
-                break;
             case POST:
+                return post();
+        }
+        return null;
+    }
 
-                break;
+    private ApacheFluentAPIResponse get() throws HttpProtocolException, IOException {
+        String url = Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams);
+        try {
+            return new ApacheFluentAPIResponse(Request.Get(url).execute());
+        } catch (ClientProtocolException e) {
+            throw new HttpProtocolException(e.getMessage(),e.getCause());
         }
     }
 
-    private IHttpResponse get() throws URLException, OpenConnectionException {
-        URL url = null;
-        try {
-            url = new URL(Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),this.url,e.getCause());
+    private ApacheFluentAPIResponse post() throws HttpProtocolException, IOException {
+        String url = Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams);
+        Request request = Request.Post(url);
+        if(isParamsBody) {//TODO: библа может не только в параметры и string
+            if(!postParams.isEmpty()) {
+                List<NameValuePair> params = new ArrayList<>();
+                this.postParams.forEach((name, value) -> params.add(new BasicNameValuePair(name, String.valueOf(value))));
+                request.bodyForm(params,charset);
+            }
+        } else {
+            request.bodyString(body,ContentType.parse(contentType));
         }
         try {
-            return new ApacheFluentAPIResponse(Request.Get(url.toURI()).execute());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),this.url,e.getCause());
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),this.url,e.getCause());
+            return new ApacheFluentAPIResponse(request.execute());
+        } catch (ClientProtocolException e) {
+            throw new HttpProtocolException(e.getMessage(),e.getCause());
         }
-    }
-
-    @Override
-    public ApacheFluentAPIResponse post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException {
-        URL url;
-        try {
-            url = new URL(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        List<NameValuePair> params = new ArrayList<>();
-        if(postArgs != null) {
-            List<NameValuePair> finalParams = params;
-            postArgs.forEach((name, value) -> finalParams.add(new BasicNameValuePair(name, (String) value)));
-            params = finalParams;
-        }
-        try {
-            return new ApacheFluentAPIResponse(Request.Post(url.toURI()).bodyForm(params, Charset.defaultCharset()).execute()); //TODO: fix error with 301 HTTP code
-        } catch (URISyntaxException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-        }
-    }
-
-    @Override
-    public ApacheFluentAPIResponse post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException {
-        return post(uri, postArgs , (Map<String, Object>) null);
-    }
-
-    @Override
-    public ApacheFluentAPIResponse post(String uri) throws URLException, OpenConnectionException {
-        return post(uri, null, (Map<String, Object>) null);
     }
 }
