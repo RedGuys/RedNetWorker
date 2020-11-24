@@ -10,7 +10,7 @@ import java.io.InputStream;
 public interface IHttpResponse {
     public String getString() throws HttpProtocolException, InputStreamException, IOException;
 
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException;
+    public InputStream getInputStream() throws HttpProtocolException, InputStreamException, IOException;
 
     public File saveToFile(String pathToFile) throws IOException;
 

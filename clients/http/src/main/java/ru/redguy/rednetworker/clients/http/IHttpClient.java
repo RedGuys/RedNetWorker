@@ -36,5 +36,7 @@ public interface IHttpClient {
 
     IHttpClient setCharset(Charset charset);
 
+    IHttpClient setContentType(String contentType);
+
     IHttpResponse execute() throws HttpProtocolException, IOException;
 }
