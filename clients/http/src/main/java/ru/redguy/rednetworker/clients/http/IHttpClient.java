@@ -28,6 +28,12 @@ public interface IHttpClient {
 
     IHttpClient setPostBody(String body);
 
+    IHttpClient setByteBody(byte[] bytes);
+
+    IHttpClient setFileBody(File file);
+
+    IHttpClient setStreamBody(InputStream stream);
+
     IHttpClient setCharset(Charset charset);
 
     IHttpResponse execute() throws HttpProtocolException, IOException;

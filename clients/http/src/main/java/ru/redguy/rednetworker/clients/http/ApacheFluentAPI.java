@@ -27,8 +27,11 @@ public class ApacheFluentAPI implements IHttpClient {
     private String url = null;
     private Map<String, Object> getParams = new HashMap<>();
     private Map<String, Object> postParams = new HashMap<>();
-    private String body = "";
-    private boolean isParamsBody = true;
+    private String postTextBody = null;
+    private byte[] postByteBody = null;
+    private File postFileBody = null;
+    private InputStream postStreamBody = null;
+    private BodyType bodyType = BodyType.params;
     private Charset charset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
@@ -60,15 +63,36 @@ public class ApacheFluentAPI implements IHttpClient {
 
     @Override
     public ApacheFluentAPI setPostParams(Map<String, Object> params) {
-        isParamsBody = true;
+        bodyType = BodyType.params;
         postParams = params;
         return this;
     }
 
     @Override
     public ApacheFluentAPI setPostBody(String body) {
-        isParamsBody = false;
-        this.body = body;
+        bodyType = BodyType.text;
+        this.postTextBody = body;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setByteBody(byte[] bytes) {
+        bodyType = BodyType.bytes;
+        this.postByteBody = bytes;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setFileBody(File file) {
+        bodyType = BodyType.file;
+        this.postFileBody = file;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setStreamBody(InputStream stream) {
+        bodyType = BodyType.stream;
+        this.postStreamBody = stream;
         return this;
     }
 
@@ -99,21 +123,33 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     private ApacheFluentAPIResponse post() throws HttpProtocolException, IOException {
-        String url = Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams);
+        String url = Protocols.formatUrlString(this.url, "http") + HttpUtils.buildGet(getParams);
         Request request = Request.Post(url);
-        if(isParamsBody) {//TODO: библа может не только в параметры и string
-            if(!postParams.isEmpty()) {
-                List<NameValuePair> params = new ArrayList<>();
-                this.postParams.forEach((name, value) -> params.add(new BasicNameValuePair(name, String.valueOf(value))));
-                request.bodyForm(params,charset);
-            }
-        } else {
-            request.bodyString(body,ContentType.parse(contentType));
+        switch (bodyType) {
+            case params:
+                if (!postParams.isEmpty()) {
+                    List<NameValuePair> params = new ArrayList<>();
+                    this.postParams.forEach((name, value) -> params.add(new BasicNameValuePair(name, String.valueOf(value))));
+                    request.bodyForm(params, charset);
+                }
+                break;
+            case text:
+                request.bodyString(postTextBody, ContentType.parse(contentType));
+                break;
+            case bytes:
+                request.bodyByteArray(postByteBody);
+                break;
+            case file:
+                request.bodyFile(postFileBody,ContentType.parse(contentType));
+                break;
+            case stream:
+                request.bodyStream(postStreamBody);
+                break;
         }
         try {
             return new ApacheFluentAPIResponse(request.execute());
         } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getMessage(), e.getCause());
         }
     }
 }
