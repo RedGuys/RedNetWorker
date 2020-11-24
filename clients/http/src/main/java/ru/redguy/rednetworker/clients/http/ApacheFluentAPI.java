@@ -7,20 +7,16 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
-import ru.redguy.rednetworker.utils.NotImplementedException;
 import ru.redguy.rednetworker.utils.Protocols;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unused")
+
 public class ApacheFluentAPI implements IHttpClient {
 
     private HttpMethod httpMethod = HttpMethod.GET;
@@ -76,29 +72,35 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public IHttpClient setByteBody(byte[] bytes) {
+    public ApacheFluentAPI setByteBody(byte[] bytes) {
         bodyType = BodyType.bytes;
         this.postByteBody = bytes;
         return this;
     }
 
     @Override
-    public IHttpClient setFileBody(File file) {
+    public ApacheFluentAPI setFileBody(File file) {
         bodyType = BodyType.file;
         this.postFileBody = file;
         return this;
     }
 
     @Override
-    public IHttpClient setStreamBody(InputStream stream) {
+    public ApacheFluentAPI setStreamBody(InputStream stream) {
         bodyType = BodyType.stream;
         this.postStreamBody = stream;
         return this;
     }
 
     @Override
-    public IHttpClient setCharset(Charset charset) {
+    public ApacheFluentAPI setCharset(Charset charset) {
         this.charset = charset;
+        return this;
+    }
+
+    @Override
+    public ApacheFluentAPI setContentType(String contentType) {
+        this.contentType = contentType;
         return this;
     }
 
