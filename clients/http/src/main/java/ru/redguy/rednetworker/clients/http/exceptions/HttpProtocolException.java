@@ -1,6 +1,5 @@
 package ru.redguy.rednetworker.clients.http.exceptions;
 
-@SuppressWarnings("unused")
 public class HttpProtocolException extends Exception {
     public HttpProtocolException() {super();}
     public HttpProtocolException(String message) {super(message);}

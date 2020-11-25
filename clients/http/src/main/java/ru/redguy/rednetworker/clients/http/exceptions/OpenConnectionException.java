@@ -1,6 +1,5 @@
 package ru.redguy.rednetworker.clients.http.exceptions;
 
-@SuppressWarnings("unused")
 public class OpenConnectionException extends Exception {
     public OpenConnectionException() {super();}
     public OpenConnectionException(String message) {super(message);}
