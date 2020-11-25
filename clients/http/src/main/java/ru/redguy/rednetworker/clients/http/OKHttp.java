@@ -1,6 +1,7 @@
 package ru.redguy.rednetworker.clients.http;
 
 import com.google.gson.Gson;
+import com.sun.xml.internal.ws.wsdl.writer.document.soap.Body;
 import jdk.nashorn.internal.ir.debug.JSONWriter;
 import jdk.nashorn.internal.parser.JSONParser;
 import okhttp3.*;
@@ -9,60 +10,137 @@ import org.apache.http.Header;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
+import sun.misc.IOUtils;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OKHttp implements IHttpClient {
 
+    private HttpMethod httpMethod = HttpMethod.GET;
+    private String url = null;
+    private Map<String, Object> getParams = new HashMap<>();
+    private Map<String, Object> postParams = new HashMap<>();
+    private String postTextBody = null;
+    private byte[] postByteBody = null;
+    private File postFileBody = null;
+    private InputStream postStreamBody = null;
+    private BodyType bodyType = BodyType.params;
+    private Charset charset = Charset.defaultCharset();
+    private String contentType = "text/plain";
+
     @Override
-    public OKHttpResponse get(String uri, Map<String, Object> args) throws OpenConnectionException, HttpProtocolException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(args)).build();
-        try {
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                throw new HttpProtocolException("Server returned "+response.code()+" code!",uri);
-            }
-            return new OKHttpResponse(response.body());
-            
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
+    public OKHttp method(HttpMethod httpMethod) {
+        this.httpMethod = httpMethod;
+        return this;
+    }
+
+    @Override
+    public OKHttp url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    @Override
+    public OKHttp setGetParams(Map<String, Object> params) {
+        this.getParams = params;
+        return this;
+    }
+
+    @Override
+    public OKHttp setPostParams(Map<String, Object> params) {
+        bodyType = BodyType.params;
+        postParams = params;
+        return this;
+    }
+
+    @Override
+    public OKHttp setPostBody(String body) {
+        bodyType = BodyType.text;
+        postTextBody = body;
+        return this;
+    }
+
+    @Override
+    public OKHttp setByteBody(byte[] bytes) {
+        bodyType = BodyType.bytes;
+        postByteBody = bytes;
+        return this;
+    }
+
+    @Override
+    public OKHttp setFileBody(File file) {
+        bodyType = BodyType.file;
+        postFileBody = file;
+        return this;
+    }
+
+    @Override
+    public OKHttp setStreamBody(InputStream stream) {
+        bodyType = BodyType.stream;
+        postStreamBody = stream;
+        return this;
+    }
+
+    @Override
+    public OKHttp setCharset(Charset charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    @Override
+    public OKHttp setContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+
+    @Override
+    public OKHttpResponse execute() throws HttpProtocolException, IOException {
+        switch (httpMethod) {
+            case GET:
+                return get();
+            case POST:
+                return post();
         }
+        return null;
     }
 
-    @Override
-    public OKHttpResponse get(String uri) throws HttpProtocolException, OpenConnectionException {
-        return get(uri, (Map<String, Object>) null);
-    }
-
-    @Override
-    public OKHttpResponse post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
-        MediaType json = MediaType.parse("application/json");
+    private OKHttpResponse get() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        Gson gson = new Gson();
-        RequestBody body = RequestBody.create(json, gson.toJson(postArgs));
-        Request request = new Request.Builder().url(Protocols.formatUrlString(uri,"http") + HttpUtils.buildGet(getArgs)).post(body).build();
-        try {
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                throw new HttpProtocolException("Server returned "+response.code()+" code!",uri);
-            }
-            return new OKHttpResponse(response.body());
+        Request request = new Request.Builder()
+                .url(Protocols.formatUrlString(url, "http") + HttpUtils.buildGet(getParams)).build();
+        Response response = client.newCall(request).execute();
+        return new OKHttpResponse(response);
+    }
 
-        } catch (IOException e) {
-            throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
+    private OKHttpResponse post() throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder request = new Request.Builder();
+        request.url(Protocols.formatUrlString(url, "http") + HttpUtils.buildGet(getParams));
+
+        switch (bodyType) {
+            case text:
+                request.post(RequestBody.create(MediaType.parse(contentType),postTextBody));
+                break;
+            case stream:
+                request.post(RequestBody.create(MediaType.parse(contentType), IOUtils.readAllBytes(postStreamBody)));
+                break;
+            case bytes:
+                request.post(RequestBody.create(MediaType.parse(contentType), postByteBody));
+                break;
+            case file:
+                request.post(RequestBody.create(MediaType.parse(contentType),postFileBody));
+                break;
+            case params:
+                request.post(RequestBody.create(MediaType.parse(contentType),HttpUtils.buildPost(postParams)));
+                break;
         }
-    }
 
-    @Override
-    public OKHttpResponse post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException, EncodingException {
-        return post(uri,postArgs, (Map<String, Object>) null);
-    }
-
-    @Override
-    public OKHttpResponse post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException, EncodingException {
-        return post(uri,null, (Map<String, Object>) null);
+        Response response = client.newCall(request.build()).execute();
+        return new OKHttpResponse(response);
     }
 }

@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
-import okhttp3.ResponseBody;
+import okhttp3.Response;
 import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
 import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
 
@@ -11,20 +11,20 @@ import java.io.InputStream;
 
 public class OKHttpResponse implements IHttpResponse {
 
-    ResponseBody response;
+    Response response;
 
-    OKHttpResponse(ResponseBody response) {
+    OKHttpResponse(Response response) {
         this.response = response;
     }
 
     @Override
     public String getString() throws HttpProtocolException, InputStreamException, IOException {
-        return response.string();
+        return response.body().string();
     }
 
     @Override
     public InputStream getInputStream() throws HttpProtocolException, InputStreamException {
-        return response.byteStream();
+        return response.body().byteStream();
     }
 
     @Override
@@ -35,8 +35,8 @@ public class OKHttpResponse implements IHttpResponse {
     @Override
     public File saveToFile(File file) throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(file);
-        while (response.byteStream().available() != 0) {
-            fileOutputStream.write(response.byteStream().read());
+        while (response.body().byteStream().available() != 0) {
+            fileOutputStream.write(response.body().byteStream().read());
         }
         fileOutputStream.close();
         return file;
