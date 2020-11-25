@@ -2,119 +2,179 @@ package ru.redguy.rednetworker.clients.http;
 
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.utils.Protocols;
+import sun.nio.ch.IOUtil;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JavaNet implements IHttpClient {
-    private Proxy proxy = null;
-    public final int connectionTimeout = 5000;
-    public final int readTimeout = 5000;
+
+    private HttpMethod httpMethod = HttpMethod.GET;
+    private String url = null;
+    private Map<String, Object> getParams = new HashMap<>();
+    private Map<String, Object> postParams = new HashMap<>();
+    private String postTextBody = null;
+    private byte[] postByteBody = null;
+    private File postFileBody = null;
+    private InputStream postStreamBody = null;
+    private BodyType bodyType = BodyType.params;
+    private Charset charset = Charset.defaultCharset();
+    private String contentType = "text/plain";
 
     public JavaNet() {
 
     }
 
-    public JavaNet(Proxy proxy) {
-        this.proxy = proxy;
+    @Override
+    public JavaNet method(HttpMethod httpMethod) {
+        this.httpMethod = httpMethod;
+        return this;
     }
 
     @Override
-    public JavaNetResponse get(String uri, Map<String, Object> args) throws URLException, OpenConnectionException, HttpProtocolException, InputStreamException {
-        URL url;
-        try {
-            url = new URL(uri+ HttpUtils.buildGet(args));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
+    public JavaNet url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    @Override
+    public JavaNet setGetParams(Map<String, Object> params) {
+        getParams = params;
+        return this;
+    }
+
+    @Override
+    public JavaNet setPostParams(Map<String, Object> params) {
+        this.bodyType = BodyType.params;
+        postParams = params;
+        return this;
+    }
+
+    @Override
+    public JavaNet setPostBody(String body) {
+        this.bodyType = BodyType.text;
+        postTextBody = body;
+        return this;
+    }
+
+    @Override
+    public JavaNet setByteBody(byte[] bytes) {
+        this.bodyType = BodyType.bytes;
+        postByteBody = bytes;
+        return this;
+    }
+
+    @Override
+    public JavaNet setFileBody(File file) {
+        this.bodyType = BodyType.file;
+        postFileBody = file;
+        return this;
+    }
+
+    @Override
+    public JavaNet setStreamBody(InputStream stream) {
+        this.bodyType = BodyType.stream;
+        postStreamBody = stream;
+        return this;
+    }
+
+    @Override
+    public JavaNet setCharset(Charset charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    @Override
+    public JavaNet setContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+
+    @Override
+    public JavaNetResponse execute() throws HttpProtocolException, IOException {
+        switch (httpMethod) {
+            case GET:
+                return get();
+            case POST:
+                return post();
         }
-        HttpURLConnection connection;
-        if(proxy != null) {
-            try {
-                connection = (HttpURLConnection) url.openConnection(this.proxy);
-            } catch (IOException e) {
-                throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-            }
-        } else {
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-            } catch (IOException e) {
-                throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-            }
-        }
+        return null;
+    }
+
+    private JavaNetResponse get() throws IOException, HttpProtocolException {
+        URL url = new URL(Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
             connection.setRequestMethod("GET");
         } catch (ProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),uri,e.getCause());
+            throw new HttpProtocolException(e.getMessage(),e.getCause());
         }
-        connection.setConnectTimeout(this.connectionTimeout);
-        connection.setReadTimeout(this.readTimeout);
-        try {
-            return new JavaNetResponse(connection.getInputStream());
-        } catch (IOException e) {
-            throw new InputStreamException(e.getMessage(),uri,e.getCause());
-        }
+        return new JavaNetResponse(connection.getInputStream());
     }
 
-    @Override
-    public JavaNetResponse get(String url) throws URLException, HttpProtocolException, OpenConnectionException, InputStreamException {
-        return get(url, (Map<String, Object>) null);
-    }
-
-    @Override
-    public JavaNetResponse post(String uri, Map<String, Object> postArgs, Map<String, Object> getArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException {
-        URL url;
-        try {
-            url = new URL(uri+HttpUtils.buildGet(getArgs));
-        } catch (MalformedURLException e) {
-            throw new URLException(e.getMessage(),uri,e.getCause());
-        }
-        HttpURLConnection connection;
-        if(proxy != null) {
-            try {
-                connection = (HttpURLConnection) url.openConnection(this.proxy);
-            } catch (IOException e) {
-                throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-            }
-        } else {
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-            } catch (IOException e) {
-                throw new OpenConnectionException(e.getMessage(),uri,e.getCause());
-            }
-        }
+    private JavaNetResponse post() throws HttpProtocolException, IOException {
+        URL url = new URL(Protocols.formatUrlString(this.url,"http")+HttpUtils.buildGet(getParams));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
             connection.setRequestMethod("POST");
         } catch (ProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),uri,e.getCause());
+            throw new HttpProtocolException(e.getMessage(),e.getCause());
         }
-        connection.setConnectTimeout(this.connectionTimeout);
-        connection.setReadTimeout(this.readTimeout);
-        try {
-            if (postArgs != null) {
+        switch (bodyType) {
+            case params:
+                if (postParams.size() != 0) {
+                    connection.setDoOutput(true);
+                    PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
+                    printWriter.print(HttpUtils.buildPost(postParams));
+                    printWriter.flush();
+                    printWriter.close();
+                }
+                break;
+            case file:
                 connection.setDoOutput(true);
-                DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-                out.writeBytes(HttpUtils.buildPost(postArgs));
-                out.flush();
-                out.close();
-            }
-        } catch (IOException e) {
-            throw new OutputStreamException(e.getMessage(),uri,e.getCause());
+                OutputStream os = connection.getOutputStream();
+                FileInputStream fis = new FileInputStream(postFileBody);
+                byte[] buf = new byte[4096];
+                int len = 0;
+                while ((len = fis.read(buf)) >= 0)
+                {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                os.close();
+                fis.close();
+                break;
+            case bytes:
+                connection.setDoOutput(true);
+                os = connection.getOutputStream();
+                os.write(postByteBody);
+                os.flush();
+                os.close();
+                break;
+            case stream:
+                connection.setDoOutput(true);
+                os = connection.getOutputStream();
+                buf = new byte[4096];
+                len = 0;
+                while ((len = postStreamBody.read(buf)) >= 0)
+                {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                os.close();
+                break;
+            case text:
+                connection.setDoOutput(true);
+                PrintWriter printWriter = new PrintWriter(connection.getOutputStream());
+                printWriter.print(postTextBody);
+                printWriter.flush();
+                printWriter.close();
+                break;
         }
-        try {
-            return new JavaNetResponse(connection.getInputStream());
-        } catch (IOException e) {
-            throw new InputStreamException(e.getMessage(),uri,e.getCause());
-        }
-    }
-
-    @Override
-    public JavaNetResponse post(String uri, Map<String, Object> postArgs) throws URLException, OpenConnectionException, HttpProtocolException, OutputStreamException, InputStreamException {
-        return post(uri, postArgs, (Map<String, Object>) null);
-    }
-
-    @Override
-    public JavaNetResponse post(String uri) throws URLException, HttpProtocolException, OutputStreamException, OpenConnectionException, InputStreamException {
-        return post(uri, null, (Map<String, Object>) null);
+        return new JavaNetResponse(connection.getInputStream());
     }
 }
