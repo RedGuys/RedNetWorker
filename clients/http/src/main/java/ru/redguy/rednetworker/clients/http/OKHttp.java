@@ -1,21 +1,13 @@
 package ru.redguy.rednetworker.clients.http;
 
-import com.google.gson.Gson;
-import com.sun.xml.internal.ws.wsdl.writer.document.soap.Body;
-import jdk.nashorn.internal.ir.debug.JSONWriter;
-import jdk.nashorn.internal.parser.JSONParser;
 import okhttp3.*;
-import okhttp3.Request.Builder;
-import org.apache.http.Header;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
 import sun.misc.IOUtils;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
