@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class OKHttpResponse implements IHttpResponse {
 
-    Response response;
+    final Response response;
 
     OKHttpResponse(Response response) {
         this.response = response;

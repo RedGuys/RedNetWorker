@@ -7,7 +7,7 @@ import java.io.*;
 
 public class JavaNetResponse implements IHttpResponse {
 
-    private InputStream inputStream;
+    private final InputStream inputStream;
 
     JavaNetResponse(InputStream inputStream) {
         this.inputStream = inputStream;

@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class ApacheFluentAPIResponse implements IHttpResponse {
 
-    private Response response;
+    private final Response response;
 
     ApacheFluentAPIResponse(Response response) {
         this.response = response;

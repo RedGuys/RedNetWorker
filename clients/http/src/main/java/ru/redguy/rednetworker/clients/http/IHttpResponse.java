@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface IHttpResponse {
-    public String getString() throws HttpProtocolException, InputStreamException, IOException;
+    String getString() throws HttpProtocolException, InputStreamException, IOException;
 
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException, IOException;
+    InputStream getInputStream() throws HttpProtocolException, InputStreamException, IOException;
 
-    public File saveToFile(String pathToFile) throws IOException;
+    File saveToFile(String pathToFile) throws IOException;
 
-    public File saveToFile(File file) throws IOException;
+    File saveToFile(File file) throws IOException;
 }

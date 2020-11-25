@@ -8,7 +8,7 @@ import java.io.*;
 
 public class ApacheHttpClientResponse implements IHttpResponse {
 
-    CloseableHttpResponse response;
+    final CloseableHttpResponse response;
 
     ApacheHttpClientResponse(CloseableHttpResponse response) {
         this.response = response;

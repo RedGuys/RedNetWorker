@@ -3,7 +3,6 @@ package ru.redguy.rednetworker.clients.http;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.Protocols;
-import sun.nio.ch.IOUtil;
 
 import java.io.*;
 import java.net.*;
