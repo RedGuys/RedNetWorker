@@ -26,3 +26,6 @@ findProject(':clients:pop3:common')?.name = 'common'
 include 'servers'
 include 'servers:tftp'
 findProject(':servers:tftp')?.name = 'tftp'
+include 'clients:smtp'
+findProject(':clients:smtp')?.name = 'smtp'
+

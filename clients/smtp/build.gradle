@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.redguy.rednetworker.clients'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+}
