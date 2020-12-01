@@ -1,49 +1,53 @@
 package ru.redguy.rednetworker.clients.ftp;
 
 import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
+import ru.redguy.rednetworker.clients.ftp.exceptions.AbortedException;
+import ru.redguy.rednetworker.clients.ftp.exceptions.ConnectionException;
+import ru.redguy.rednetworker.clients.ftp.exceptions.UnknownServerErrorException;
+import ru.redguy.rednetworker.utils.exceptions.NotImplementedException;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public interface IFTPSession {
 
-    IFTPConnection logout() throws IOException;
+    IFTPConnection logout() throws IOException, UnknownServerErrorException;
 
-    String pwd() throws IOException;
+    String pwd() throws IOException, UnknownServerErrorException;
 
-    String getStatus() throws IOException;
+    String getStatus() throws IOException, UnknownServerErrorException;
 
-    String getSystemType() throws IOException;
+    String getSystemType() throws IOException, NotImplementedException;
 
-    String getServerHelp() throws IOException;
+    String getServerHelp() throws IOException, UnknownServerErrorException;
 
-    String[] runCommand(String command, String args) throws IOException;
+    String[] runCommand(String command, String args) throws IOException, UnknownServerErrorException;
 
-    FTPFile[] list() throws IOException;
+    FTPFile[] list() throws IOException, AbortedException, UnknownServerErrorException;
 
-    FTPFile[] list(String path) throws IOException;
+    FTPFile[] list(String path) throws IOException, AbortedException, UnknownServerErrorException;
 
-    FTPFile[] listDirs(String path) throws IOException;
+    FTPFile[] listDirs(String path) throws IOException, NotImplementedException;
 
-    FTPFile[] listDirs() throws IOException;
+    FTPFile[] listDirs() throws IOException, NotImplementedException;
 
-    void uploadFile(String localPath, String remotePath) throws IOException;
+    void uploadFile(String localPath, String remotePath) throws IOException, UnknownServerErrorException, AbortedException;
 
-    void downloadFile(String localPath, String remotePath) throws IOException;
+    void downloadFile(String localPath, String remotePath) throws IOException, UnknownServerErrorException, AbortedException;
 
-    void rmdir(String remotePath) throws IOException;
+    void rmdir(String remotePath) throws IOException, UnknownServerErrorException;
 
-    void mkdir(String remotePath) throws IOException;
+    void mkdir(String remotePath) throws IOException, UnknownServerErrorException;
 
-    void delete(String remoteFile) throws IOException;
+    void delete(String remoteFile) throws IOException, UnknownServerErrorException;
 
-    void cd(String path) throws IOException;
+    void cd(String path) throws IOException, UnknownServerErrorException;
 
-    void rename(String oldName, String newName) throws IOException;
+    void rename(String oldName, String newName) throws IOException, UnknownServerErrorException;
 
-    void disconnect() throws IOException;
+    void disconnect() throws IOException, UnknownServerErrorException;
 
-    void appendFile(String remoteFile, InputStream inputStream) throws IOException;
+    void appendFile(String remoteFile, InputStream inputStream) throws IOException, UnknownServerErrorException, AbortedException, InterruptedException;
 
     void changeLocalTransferMode(TransferMode transferMode);
 }

@@ -106,7 +106,6 @@ public class JschSFTPClient implements ISFTPClient {
                 sftpFile.lastAccessDate = new DataTime(file.getAttrs().getATime());
                 sftpFile.lastEditDate = new DataTime(file.getAttrs().getMTime());
                 sftpFile.size = file.getAttrs().getSize();
-                sftpFile.server = this.host+":"+this.port;
                 result.add(sftpFile);
             }
             return result.toArray(new SFTPFile[0]);
