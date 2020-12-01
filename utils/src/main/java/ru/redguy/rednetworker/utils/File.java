@@ -6,7 +6,6 @@ public class File {
     public String path;
     public DataTime lastEditDate = new DataTime();
     public long size;
-    public String server;
     public String owner;
     public String group;
     public boolean isDirectory;
