@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.redguy.rednetworker.clients.http'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":clients:http:common")
+    compile project(":utils")
+}

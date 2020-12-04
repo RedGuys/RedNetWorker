@@ -36,4 +36,6 @@ include 'clients:http:ApacheHttpClient'
 findProject(':clients:http:ApacheHttpClient')?.name = 'ApacheHttpClient'
 include 'clients:http:JavaNet'
 findProject(':clients:http:JavaNet')?.name = 'JavaNet'
+include 'clients:http:OKHttp'
+findProject(':clients:http:OKHttp')?.name = 'OKHttp'
 
