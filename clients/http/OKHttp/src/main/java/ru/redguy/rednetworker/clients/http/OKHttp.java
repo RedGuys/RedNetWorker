@@ -25,6 +25,10 @@ public class OKHttp implements IHttpClient {
     private Charset charset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
+    public OKHttp() {
+
+    }
+
     @Override
     public OKHttp method(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;

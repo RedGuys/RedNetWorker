@@ -31,11 +31,11 @@ public class ApacheFluentAPI implements IHttpClient {
     private Charset charset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
-    ApacheFluentAPI() {
+    public ApacheFluentAPI() {
 
     }
 
-    ApacheFluentAPI(String url) {
+    public ApacheFluentAPI(String url) {
         this.url = url;
     }
 
