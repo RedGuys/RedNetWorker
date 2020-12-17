@@ -1,5 +1,7 @@
 package ru.redguy.rednetworker.clients.http;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Response;
 import org.apache.http.entity.ContentType;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
@@ -118,7 +120,14 @@ public class ApacheFluentAPI implements IHttpClient {
     private ApacheFluentAPIResponse get() throws HttpProtocolException, IOException {
         String url = Protocols.formatUrlString(this.url,"http") + HttpUtils.buildGet(getParams);
         try {
-            return new ApacheFluentAPIResponse(Request.Get(url).execute());
+            Response response = Request.Get(url).execute();
+            HttpResponse httpResponse = response.returnResponse();
+            if(httpResponse.getStatusLine().getStatusCode() >= 400) {
+                throw new HttpProtocolException(httpResponse.getStatusLine().getReasonPhrase(),
+                        httpResponse.getStatusLine().getStatusCode());
+            } else {
+                return new ApacheFluentAPIResponse(response);
+            }
         } catch (ClientProtocolException e) {
             throw new HttpProtocolException(e.getMessage(),e.getCause());
         }

@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 dependencies {
     compile project(":clients:http:common")
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.6'
