@@ -1,8 +1,10 @@
 package ru.redguy.rednetworker.clients.http;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Response;
 import org.apache.http.entity.ContentType;
+import org.apache.http.util.EntityUtils;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -123,13 +125,15 @@ public class ApacheFluentAPI implements IHttpClient {
             Response response = Request.Get(url).execute();
             HttpResponse httpResponse = response.returnResponse();
             if(httpResponse.getStatusLine().getStatusCode() >= 400) {
-                throw new HttpProtocolException(httpResponse.getStatusLine().getReasonPhrase(),
-                        httpResponse.getStatusLine().getStatusCode());
+                throw new HttpProtocolException(
+                        httpResponse.getStatusLine().getReasonPhrase(),
+                        httpResponse.getStatusLine().getStatusCode(),
+                        new ApacheFluentAPIResponse(httpResponse,charset));
             } else {
-                return new ApacheFluentAPIResponse(response);
+                return new ApacheFluentAPIResponse(httpResponse,charset);
             }
         } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
     }
 
@@ -158,9 +162,19 @@ public class ApacheFluentAPI implements IHttpClient {
                 break;
         }
         try {
-            return new ApacheFluentAPIResponse(request.execute());
+            Response response = request.execute();
+            HttpResponse httpResponse = response.returnResponse();
+            if(httpResponse.getStatusLine().getStatusCode() >= 400) {
+                throw new HttpProtocolException(
+                        httpResponse.getStatusLine().getReasonPhrase(),
+                        httpResponse.getStatusLine().getStatusCode(),
+                        new ApacheFluentAPIResponse(httpResponse,charset)
+                );
+            } else {
+                return new ApacheFluentAPIResponse(httpResponse,charset);
+            }
         } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(), e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
     }
 }

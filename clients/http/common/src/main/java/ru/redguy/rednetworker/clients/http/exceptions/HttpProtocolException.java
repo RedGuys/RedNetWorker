@@ -1,24 +1,26 @@
 package ru.redguy.rednetworker.clients.http.exceptions;
 
-import java.net.HttpURLConnection;
+import ru.redguy.rednetworker.clients.http.IHttpResponse;
 
 public class HttpProtocolException extends Exception {
-    private int code;
+    private int code = 0;
+    private IHttpResponse response = null;
+    
+    public HttpProtocolException(Throwable cause, String message) {
+        super(message, cause);
+    }
 
-    public HttpProtocolException() {super();}
-    public HttpProtocolException(String message) {super(message);}
-    public HttpProtocolException(String message, int code) {
+    public HttpProtocolException(String message, int code, IHttpResponse response) {
         super(message);
         this.code = code;
+        this.response = response;
     }
-    public HttpProtocolException(String message, Throwable cause) {super(message,cause);}
-    public HttpProtocolException(String message, Throwable cause, int code) {
-        super(message, cause);
-        this.code = code;
-    }
-    public HttpProtocolException(Throwable cause) {super(cause);}
 
     public int getCode() {
         return code;
+    }
+
+    public IHttpResponse getResponse() {
+        return response;
     }
 }
