@@ -1,8 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
-import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
 
 import java.io.*;
 
@@ -15,7 +13,7 @@ public class ApacheHttpClientResponse implements IHttpResponse {
     }
 
     @Override
-    public String getString() throws HttpProtocolException, InputStreamException {
+    public String getString() {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
@@ -30,7 +28,7 @@ public class ApacheHttpClientResponse implements IHttpResponse {
     }
 
     @Override
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException, IOException {
+    public InputStream getInputStream() throws IOException {
         return response.getEntity().getContent();
     }
 

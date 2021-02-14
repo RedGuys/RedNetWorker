@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface IHttpResponse {
-    String getString() throws HttpProtocolException, InputStreamException, IOException;
+    String getString();
 
-    InputStream getInputStream() throws HttpProtocolException, InputStreamException, IOException;
+    InputStream getInputStream() throws IOException;
 
     File saveToFile(String pathToFile) throws IOException;
 

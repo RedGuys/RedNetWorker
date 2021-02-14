@@ -33,12 +33,12 @@ public class ApacheFluentAPIResponse implements IHttpResponse {
     }
 
     @Override
-    public String getString() throws HttpProtocolException, InputStreamException {
+    public String getString() {
         return content.asString();
     }
 
     @Override
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException {
+    public InputStream getInputStream() {
         return content.asStream();
     }
 

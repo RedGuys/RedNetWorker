@@ -1,6 +1,8 @@
 package ru.redguy.rednetworker.clients.http;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.EntityBuilder;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.entity.ContentType;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
@@ -15,6 +17,7 @@ import org.apache.http.message.BasicNameValuePair;
 import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.Protocols;
 
+import javax.xml.ws.Response;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -118,9 +121,18 @@ public class ApacheHttpClient implements IHttpClient {
         get.setConfig(RequestConfig.DEFAULT);
         CloseableHttpClient client = HttpClients.createDefault();
         try {
-            return new ApacheHttpClientResponse(client.execute(get));
+            CloseableHttpResponse response = client.execute(get);
+            if(response.getStatusLine().getStatusCode() >= 400) {
+                throw new HttpProtocolException(
+                        response.getStatusLine().getReasonPhrase(),
+                        response.getStatusLine().getStatusCode(),
+                        new ApacheHttpClientResponse(response)
+                );
+            } else {
+                return new ApacheHttpClientResponse(response);
+            }
         } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
     }
 
@@ -165,9 +177,18 @@ public class ApacheHttpClient implements IHttpClient {
         }
         CloseableHttpClient client = HttpClients.createDefault();
         try {
-            return new ApacheHttpClientResponse(client.execute(post));
+            CloseableHttpResponse response = client.execute(post);
+            if(response.getStatusLine().getStatusCode() >= 400) {
+                throw new HttpProtocolException(
+                        response.getStatusLine().getReasonPhrase(),
+                        response.getStatusLine().getStatusCode(),
+                        new ApacheHttpClientResponse(response)
+                );
+            } else {
+                return new ApacheHttpClientResponse(response);
+            }
         } catch (ClientProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
     }
 }
