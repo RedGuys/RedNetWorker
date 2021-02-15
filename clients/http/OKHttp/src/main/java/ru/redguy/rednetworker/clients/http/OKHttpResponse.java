@@ -18,12 +18,16 @@ public class OKHttpResponse implements IHttpResponse {
     }
 
     @Override
-    public String getString() throws HttpProtocolException, InputStreamException, IOException {
-        return response.body().string();
+    public String getString() {
+        try {
+            return response.body().string();
+        } catch (IOException e) {
+            return "";
+        }
     }
 
     @Override
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException {
+    public InputStream getInputStream() {
         return response.body().byteStream();
     }
 

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven'
 }
 
 group 'ru.redguy.rednetworker'
@@ -12,4 +13,18 @@ repositories {
 }
 
 dependencies {
+
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
+                authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
+            }
+            pom.version = "1.0.0"
+            pom.artifactId = "utils"
+            pom.groupId = "ru.redguy.rednetworker"
+        }
+    }
 }

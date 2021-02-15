@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven'
 }
 
 group 'ru.redguy.rednetworker'
-version '1.0.1'
+version '1.0.3'
 
 sourceCompatibility = 1.8
 
@@ -16,6 +17,19 @@ repositories {
 
 jar {
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
+                authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
+            }
+            pom.version = "1.0.3"
+            pom.artifactId = "rednetworker"
+            pom.groupId = "ru.redguy"
+        }
+    }
 }
 
 dependencies {

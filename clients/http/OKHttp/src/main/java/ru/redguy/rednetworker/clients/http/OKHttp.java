@@ -105,15 +105,23 @@ public class OKHttp implements IHttpClient {
         return null;
     }
 
-    private OKHttpResponse get() throws IOException {
+    private OKHttpResponse get() throws IOException, HttpProtocolException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(Protocols.formatUrlString(url, "http") + HttpUtils.buildGet(getParams)).build();
         Response response = client.newCall(request).execute();
-        return new OKHttpResponse(response);
+        if(response.code() >= 400) {
+            throw new HttpProtocolException(
+                    response.message(),
+                    response.code(),
+                    new OKHttpResponse(response)
+            );
+        } else {
+            return new OKHttpResponse(response);
+        }
     }
 
-    private OKHttpResponse post() throws IOException {
+    private OKHttpResponse post() throws IOException, HttpProtocolException {
         OkHttpClient client = new OkHttpClient();
         Request.Builder request = new Request.Builder();
         request.url(Protocols.formatUrlString(url, "http") + HttpUtils.buildGet(getParams));
@@ -137,6 +145,14 @@ public class OKHttp implements IHttpClient {
         }
 
         Response response = client.newCall(request.build()).execute();
-        return new OKHttpResponse(response);
+        if(response.code() >= 400) {
+            throw new HttpProtocolException(
+                    response.message(),
+                    response.code(),
+                    new OKHttpResponse(response)
+            );
+        } else {
+            return new OKHttpResponse(response);
+        }
     }
 }

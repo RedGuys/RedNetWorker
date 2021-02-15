@@ -38,4 +38,6 @@ include 'clients:http:JavaNet'
 findProject(':clients:http:JavaNet')?.name = 'JavaNet'
 include 'clients:http:OKHttp'
 findProject(':clients:http:OKHttp')?.name = 'OKHttp'
+include 'clients:smb'
+findProject(':clients:smb')?.name = 'smb'
 
