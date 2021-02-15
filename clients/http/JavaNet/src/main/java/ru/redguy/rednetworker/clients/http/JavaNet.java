@@ -110,9 +110,13 @@ public class JavaNet implements IHttpClient {
         try {
             connection.setRequestMethod("GET");
         } catch (ProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
-        return new JavaNetResponse(connection.getInputStream());
+        try {
+            return new JavaNetResponse(connection.getInputStream());
+        } catch (FileNotFoundException e) {
+            throw new HttpProtocolException("Not Found",404,null);
+        }
     }
 
     private JavaNetResponse post() throws HttpProtocolException, IOException {
@@ -121,7 +125,7 @@ public class JavaNet implements IHttpClient {
         try {
             connection.setRequestMethod("POST");
         } catch (ProtocolException e) {
-            throw new HttpProtocolException(e.getMessage(),e.getCause());
+            throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
         switch (bodyType) {
             case params:
@@ -174,6 +178,10 @@ public class JavaNet implements IHttpClient {
                 printWriter.close();
                 break;
         }
-        return new JavaNetResponse(connection.getInputStream());
+        try {
+            return new JavaNetResponse(connection.getInputStream());
+        } catch (FileNotFoundException e) {
+            throw new HttpProtocolException("Not Found",404,null);
+        }
     }
 }

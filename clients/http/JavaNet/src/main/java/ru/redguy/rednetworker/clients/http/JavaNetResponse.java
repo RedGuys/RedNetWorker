@@ -14,7 +14,7 @@ public class JavaNetResponse implements IHttpResponse {
     }
 
     @Override
-    public String getString() throws HttpProtocolException, InputStreamException {
+    public String getString() {
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
@@ -29,7 +29,7 @@ public class JavaNetResponse implements IHttpResponse {
     }
 
     @Override
-    public InputStream getInputStream() throws HttpProtocolException, InputStreamException {
+    public InputStream getInputStream() {
         return inputStream;
     }
 
