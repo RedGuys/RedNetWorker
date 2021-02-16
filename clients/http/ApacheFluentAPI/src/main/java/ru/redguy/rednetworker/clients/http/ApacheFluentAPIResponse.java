@@ -1,14 +1,10 @@
 package ru.redguy.rednetworker.clients.http;
 
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Content;
-import org.apache.http.client.fluent.Response;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
-import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
-import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
+import ru.redguy.rednetworker.utils.EmptyInputStream;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -21,12 +17,16 @@ public class ApacheFluentAPIResponse implements IHttpResponse {
     ApacheFluentAPIResponse(HttpResponse httpResponse, Charset charset) {
         this.response = httpResponse;
         try {
-            this.content = new Content(
-                    EntityUtils.toByteArray(httpResponse.getEntity()),
-                    ContentType.parse(
-                            httpResponse.getEntity().getContentType().getElements()[0].getName()
-                    ).withCharset(charset)
-            );
+            if(httpResponse.getEntity() == null) {
+                this.content = new Content(
+                        EntityUtils.toByteArray(httpResponse.getEntity()),
+                        ContentType.parse(
+                                httpResponse.getEntity().getContentType().getElements()[0].getName()
+                        ).withCharset(charset)
+                );
+            } else {
+                content = null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,29 +34,33 @@ public class ApacheFluentAPIResponse implements IHttpResponse {
 
     @Override
     public String getString() {
-        return content.asString();
+        if(content == null) return ""; else return content.asString();
     }
 
     @Override
     public InputStream getInputStream() {
-        return content.asStream();
+        if(content == null) return new EmptyInputStream(); else return content.asStream();
     }
 
     @Override
     public File saveToFile(String pathToFile) throws IOException {
         File file = new File(pathToFile);
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            response.getEntity().writeTo(outputStream);
-            outputStream.flush();
+        if(content != null) {
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                response.getEntity().writeTo(outputStream);
+                outputStream.flush();
+            }
         }
         return file;
     }
 
     @Override
     public File saveToFile(File file) throws IOException {
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            response.getEntity().writeTo(outputStream);
-            outputStream.flush();
+        if(content != null) {
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                response.getEntity().writeTo(outputStream);
+                outputStream.flush();
+            }
         }
         return file;
     }

@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'ru.redguy.rednetworker'
-version '1.0.0'
+version '1.0.1'
 
 sourceCompatibility = 1.8
 
@@ -22,7 +22,7 @@ uploadArchives {
             repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
                 authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
             }
-            pom.version = "1.0.0"
+            pom.version = "1.0.1"
             pom.artifactId = "utils"
             pom.groupId = "ru.redguy.rednetworker"
         }
