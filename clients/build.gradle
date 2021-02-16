@@ -22,5 +22,4 @@ dependencies {
     compile project(":clients:tftp")
     compile project(":clients:pop3")
     compile project(":clients:smtp")
-    compile project(":clients:smb")
 }
