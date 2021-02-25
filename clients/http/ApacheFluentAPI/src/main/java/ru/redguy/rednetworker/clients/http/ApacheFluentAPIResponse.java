@@ -1,5 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.entity.ContentType;
@@ -17,7 +18,7 @@ public class ApacheFluentAPIResponse implements IHttpResponse {
     ApacheFluentAPIResponse(HttpResponse httpResponse, Charset charset) {
         this.response = httpResponse;
         try {
-            if(httpResponse.getEntity() == null) {
+            if(httpResponse.getEntity() != null) {
                 this.content = new Content(
                         EntityUtils.toByteArray(httpResponse.getEntity()),
                         ContentType.parse(

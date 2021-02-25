@@ -4,10 +4,14 @@ plugins {
 }
 
 group 'ru.redguy.rednetworker.clients.http'
-version '1.0.5'
+version '1.0.6'
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'redguy'
+        url = 'https://mvn.redguy.ru/repository/maven-public/'
+    }
 }
 
 dependencies {
@@ -22,7 +26,7 @@ uploadArchives {
             repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
                 authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
             }
-            pom.version = "1.0.5"
+            pom.version = "1.0.6"
             pom.artifactId = "apachefluentapi"
             pom.groupId = "ru.redguy.rednetworker.clients.http"
         }

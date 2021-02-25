@@ -32,7 +32,8 @@ public class ApacheFluentAPI implements IHttpClient {
     private File postFileBody = null;
     private InputStream postStreamBody = null;
     private BodyType bodyType = BodyType.params;
-    private Charset charset = Charset.defaultCharset();
+    private Charset requestCharset = Charset.defaultCharset();
+    private Charset responseCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
     public ApacheFluentAPI() {
@@ -97,8 +98,14 @@ public class ApacheFluentAPI implements IHttpClient {
     }
 
     @Override
-    public ApacheFluentAPI setCharset(Charset charset) {
-        this.charset = charset;
+    public IHttpClient setRequestCharset(Charset charset) {
+        this.requestCharset = charset;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setResponseCharset(Charset charset) {
+        this.responseCharset = charset;
         return this;
     }
 
@@ -128,9 +135,9 @@ public class ApacheFluentAPI implements IHttpClient {
                 throw new HttpProtocolException(
                         httpResponse.getStatusLine().getReasonPhrase(),
                         httpResponse.getStatusLine().getStatusCode(),
-                        new ApacheFluentAPIResponse(httpResponse,charset));
+                        new ApacheFluentAPIResponse(httpResponse,responseCharset));
             } else {
-                return new ApacheFluentAPIResponse(httpResponse,charset);
+                return new ApacheFluentAPIResponse(httpResponse,responseCharset);
             }
         } catch (ClientProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
@@ -145,17 +152,17 @@ public class ApacheFluentAPI implements IHttpClient {
                 if (!postParams.isEmpty()) {
                     List<NameValuePair> params = new ArrayList<>();
                     this.postParams.forEach((name, value) -> params.add(new BasicNameValuePair(name, String.valueOf(value))));
-                    request.bodyForm(params, charset);
+                    request.bodyForm(params, requestCharset);
                 }
                 break;
             case text:
-                request.bodyString(postTextBody, ContentType.parse(contentType));
+                request.bodyString(postTextBody, ContentType.parse(contentType).withCharset(requestCharset));
                 break;
             case bytes:
                 request.bodyByteArray(postByteBody);
                 break;
             case file:
-                request.bodyFile(postFileBody,ContentType.parse(contentType));
+                request.bodyFile(postFileBody,ContentType.parse(contentType).withCharset(requestCharset));
                 break;
             case stream:
                 request.bodyStream(postStreamBody);
@@ -168,10 +175,10 @@ public class ApacheFluentAPI implements IHttpClient {
                 throw new HttpProtocolException(
                         httpResponse.getStatusLine().getReasonPhrase(),
                         httpResponse.getStatusLine().getStatusCode(),
-                        new ApacheFluentAPIResponse(httpResponse,charset)
+                        new ApacheFluentAPIResponse(httpResponse,responseCharset)
                 );
             } else {
-                return new ApacheFluentAPIResponse(httpResponse,charset);
+                return new ApacheFluentAPIResponse(httpResponse,responseCharset);
             }
         } catch (ClientProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());

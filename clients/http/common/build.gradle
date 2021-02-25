@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'ru.redguy.rednetworker.clients.http'
-version '1.0.2'
+version '1.0.3'
 
 repositories {
     mavenCentral()
@@ -20,7 +20,7 @@ uploadArchives {
             repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
                 authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
             }
-            pom.version = "1.0.2"
+            pom.version = "1.0.3"
             pom.artifactId = "common"
             pom.groupId = "ru.redguy.rednetworker.clients.http"
         }

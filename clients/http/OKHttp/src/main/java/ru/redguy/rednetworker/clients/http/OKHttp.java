@@ -22,7 +22,8 @@ public class OKHttp implements IHttpClient {
     private File postFileBody = null;
     private InputStream postStreamBody = null;
     private BodyType bodyType = BodyType.params;
-    private Charset charset = Charset.defaultCharset();
+    private Charset requestCharset = Charset.defaultCharset();
+    private Charset responseCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
     public OKHttp() {
@@ -83,8 +84,14 @@ public class OKHttp implements IHttpClient {
     }
 
     @Override
-    public OKHttp setCharset(Charset charset) {
-        this.charset = charset;
+    public IHttpClient setRequestCharset(Charset charset) {
+        requestCharset = charset;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setResponseCharset(Charset charset) {
+        responseCharset = charset;
         return this;
     }
 
@@ -128,19 +135,19 @@ public class OKHttp implements IHttpClient {
 
         switch (bodyType) {
             case text:
-                request.post(RequestBody.create(MediaType.parse(contentType),postTextBody));
+                request.post(RequestBody.create(MediaType.parse(contentType+"; charset="+requestCharset),postTextBody));
                 break;
             case stream:
-                request.post(RequestBody.create(MediaType.parse(contentType), IOUtils.readAllBytes(postStreamBody)));
+                request.post(RequestBody.create(MediaType.parse(contentType+"; charset="+requestCharset), IOUtils.readAllBytes(postStreamBody)));
                 break;
             case bytes:
-                request.post(RequestBody.create(MediaType.parse(contentType), postByteBody));
+                request.post(RequestBody.create(MediaType.parse(contentType+"; charset="+requestCharset), postByteBody));
                 break;
             case file:
-                request.post(RequestBody.create(MediaType.parse(contentType),postFileBody));
+                request.post(RequestBody.create(MediaType.parse(contentType+"; charset="+requestCharset),postFileBody));
                 break;
             case params:
-                request.post(RequestBody.create(MediaType.parse(contentType),HttpUtils.buildPost(postParams)));
+                request.post(RequestBody.create(MediaType.parse(contentType+"; charset="+requestCharset),HttpUtils.buildPost(postParams)));
                 break;
         }
 
