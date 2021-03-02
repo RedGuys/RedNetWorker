@@ -33,7 +33,8 @@ public class ApacheHttpClient implements IHttpClient {
     private File postFileBody = null;
     private InputStream postStreamBody = null;
     private BodyType bodyType = BodyType.params;
-    private Charset charset = Charset.defaultCharset();
+    private Charset requestCharset = Charset.defaultCharset();
+    private Charset responseCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
     public ApacheHttpClient() {
@@ -94,8 +95,14 @@ public class ApacheHttpClient implements IHttpClient {
     }
 
     @Override
-    public ApacheHttpClient setCharset(Charset charset) {
-        this.charset = charset;
+    public IHttpClient setRequestCharset(Charset charset) {
+        requestCharset = charset;
+        return this;
+    }
+
+    @Override
+    public IHttpClient setResponseCharset(Charset charset) {
+        responseCharset = charset;
         return this;
     }
 
@@ -144,33 +151,33 @@ public class ApacheHttpClient implements IHttpClient {
                 if (!postParams.isEmpty()) {
                     List<NameValuePair> params = new ArrayList<>();
                     this.postParams.forEach((name, value) -> params.add(new BasicNameValuePair(name, String.valueOf(value))));
-                    post.setEntity(new UrlEncodedFormEntity(params,charset));
+                    post.setEntity(new UrlEncodedFormEntity(params,requestCharset));
                 }
                 break;
             case text:
                 post.setEntity(EntityBuilder.create()
                         .setText(postTextBody)
-                        .setContentType(ContentType.parse(contentType))
+                        .setContentType(ContentType.parse(contentType).withCharset(requestCharset))
                         .build()
                 );
                 break;
             case stream:
                 post.setEntity(EntityBuilder.create()
                         .setStream(postStreamBody)
-                        .setContentType(ContentType.parse(contentType))
+                        .setContentType(ContentType.parse(contentType).withCharset(requestCharset))
                         .build()
                 );
                 break;
             case file:
                 post.setEntity(EntityBuilder.create()
                         .setFile(postFileBody)
-                        .setContentType(ContentType.parse(contentType))
+                        .setContentType(ContentType.parse(contentType).withCharset(requestCharset))
                         .build());
                 break;
             case bytes:
                 post.setEntity(EntityBuilder.create()
                         .setBinary(postByteBody)
-                        .setContentType(ContentType.parse(contentType))
+                        .setContentType(ContentType.parse(contentType).withCharset(requestCharset))
                         .build()
                 );
                 break;
