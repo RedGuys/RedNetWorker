@@ -1,12 +1,14 @@
 package ru.redguy.rednetworker.clients.http;
 
 import okhttp3.*;
-import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
 import sun.misc.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;

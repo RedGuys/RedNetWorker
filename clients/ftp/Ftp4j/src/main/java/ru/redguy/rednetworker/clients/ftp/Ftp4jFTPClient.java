@@ -1,17 +1,12 @@
 package ru.redguy.rednetworker.clients.ftp;
 
-import ru.redguy.rednetworker.clients.ftp.enums.Ftp4jFTPFileType;
-import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
-import ru.redguy.rednetworker.utils.DataTime;
-import it.sauronsoftware.ftp4j.*;
-import ru.redguy.rednetworker.clients.ftp.exceptions.*;
+import it.sauronsoftware.ftp4j.FTPClient;
+import it.sauronsoftware.ftp4j.FTPException;
+import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
+import ru.redguy.rednetworker.clients.ftp.exceptions.UnknownServerErrorException;
 import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class Ftp4jFTPClient implements IFTPClient {
     private String host = "localhost";

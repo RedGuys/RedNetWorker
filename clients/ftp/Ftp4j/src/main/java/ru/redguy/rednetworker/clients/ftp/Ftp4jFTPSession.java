@@ -4,7 +4,6 @@ import it.sauronsoftware.ftp4j.*;
 import ru.redguy.rednetworker.clients.ftp.enums.Ftp4jFTPFileType;
 import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
 import ru.redguy.rednetworker.clients.ftp.exceptions.AbortedException;
-import ru.redguy.rednetworker.clients.ftp.exceptions.ConnectionException;
 import ru.redguy.rednetworker.clients.ftp.exceptions.UnknownServerErrorException;
 import ru.redguy.rednetworker.utils.DataTime;
 import ru.redguy.rednetworker.utils.exceptions.NotImplementedException;

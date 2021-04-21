@@ -1,8 +1,5 @@
 package ru.redguy.rednetworker.clients.http;
 
-import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
-import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
-
 import java.io.*;
 
 public class JavaNetResponse implements IHttpResponse {

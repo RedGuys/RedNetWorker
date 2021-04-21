@@ -3,8 +3,6 @@ package ru.redguy.rednetworker.clients.ftp;
 import org.apache.commons.net.ftp.FTPClient;
 import ru.redguy.rednetworker.clients.ftp.enums.ApacheFTPFileType;
 import ru.redguy.rednetworker.clients.ftp.enums.TransferMode;
-import ru.redguy.rednetworker.clients.ftp.exceptions.ConnectionException;
-import ru.redguy.rednetworker.clients.ftp.exceptions.FTPFileNotFoundException;
 import ru.redguy.rednetworker.utils.DataTime;
 
 import java.io.*;

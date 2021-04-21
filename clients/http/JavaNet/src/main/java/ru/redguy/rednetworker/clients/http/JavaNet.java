@@ -1,11 +1,13 @@
 package ru.redguy.rednetworker.clients.http;
 
+import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
 import ru.redguy.rednetworker.utils.HttpUtils;
-import ru.redguy.rednetworker.clients.http.exceptions.*;
 import ru.redguy.rednetworker.utils.Protocols;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;

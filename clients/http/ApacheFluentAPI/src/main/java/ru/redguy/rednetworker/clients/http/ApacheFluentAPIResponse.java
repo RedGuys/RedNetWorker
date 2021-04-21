@@ -1,6 +1,5 @@
 package ru.redguy.rednetworker.clients.http;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.entity.ContentType;

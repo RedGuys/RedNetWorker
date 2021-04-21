@@ -1,8 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
 
-import ru.redguy.rednetworker.clients.ftp.exceptions.AuthorizationException;
-
 import java.io.IOException;
 
 public interface IFTPConnection {

@@ -1,8 +1,6 @@
 package ru.redguy.rednetworker.clients.http;
 
 import okhttp3.Response;
-import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
-import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
 
 import java.io.File;
 import java.io.FileOutputStream;

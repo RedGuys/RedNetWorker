@@ -1,6 +1,6 @@
 package ru.redguy.rednetworker.clients.ftp;
 
-import ru.redguy.rednetworker.clients.ftp.exceptions.*;
+import ru.redguy.rednetworker.clients.ftp.exceptions.UnknownServerErrorException;
 import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
 import java.io.IOException;

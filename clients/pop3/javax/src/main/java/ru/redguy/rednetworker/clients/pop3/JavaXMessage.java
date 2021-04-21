@@ -8,7 +8,9 @@ import javax.mail.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class JavaXMessage implements IPOP3Message {
 

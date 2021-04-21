@@ -4,7 +4,6 @@ import ru.redguy.rednetworker.clients.tftp.enums.TransferMode;
 import ru.redguy.rednetworker.clients.tftp.exeptions.FileTransferException;
 import ru.redguy.rednetworker.utils.exceptions.OpenConnectionException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -1,8 +1,8 @@
 package ru.redguy.rednetworker.clients.pop3;
 
+import ru.redguy.rednetworker.clients.pop3.enums.RecipientType;
 import ru.redguy.rednetworker.clients.pop3.exeptions.MessagingException;
 import ru.redguy.rednetworker.utils.Header;
-import ru.redguy.rednetworker.clients.pop3.enums.RecipientType;
 
 import javax.activation.DataHandler;
 import java.io.IOException;

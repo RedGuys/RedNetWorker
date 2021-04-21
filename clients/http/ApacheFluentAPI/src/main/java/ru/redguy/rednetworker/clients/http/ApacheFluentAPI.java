@@ -1,19 +1,19 @@
 package ru.redguy.rednetworker.clients.http;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Content;
-import org.apache.http.client.fluent.Response;
-import org.apache.http.entity.ContentType;
-import org.apache.http.util.EntityUtils;
-import ru.redguy.rednetworker.utils.HttpUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
+import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
-import ru.redguy.rednetworker.clients.http.exceptions.*;
+import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
+import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;

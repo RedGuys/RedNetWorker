@@ -1,8 +1,5 @@
 package ru.redguy.rednetworker.clients.http;
 
-import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
-import ru.redguy.rednetworker.clients.http.exceptions.InputStreamException;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

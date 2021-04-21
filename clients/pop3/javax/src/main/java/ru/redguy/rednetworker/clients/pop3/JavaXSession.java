@@ -3,7 +3,6 @@ package ru.redguy.rednetworker.clients.pop3;
 import ru.redguy.rednetworker.clients.pop3.exeptions.FolderException;
 
 import javax.mail.*;
-import java.util.Properties;
 
 public class JavaXSession implements IPOP3Session {
 
