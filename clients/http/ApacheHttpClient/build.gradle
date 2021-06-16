@@ -19,7 +19,7 @@ dependencies {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "https://mvn.redguy.ru/repository/maven-releases/") {
+            repository(url: "https://repo.redguy.ru/repository/maven-releases/") {
                 authentication(userName: System.getenv("MVN_USER"), password: System.getenv("MVN_PASSWORD"))
             }
             pom.version = "1.0.3"
