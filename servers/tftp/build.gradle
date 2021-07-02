@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.redguy.rednetworker.servers'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":utils")
+    compile files('libs/TFTPServer-1.0.jar')
+}
