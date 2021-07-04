@@ -3,18 +3,21 @@ package ru.redguy.rednetworker.clients.http;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class ApacheHttpClientResponse implements IHttpResponse {
 
     final CloseableHttpResponse response;
+    private Charset responseCharset;
 
-    ApacheHttpClientResponse(CloseableHttpResponse response) {
+    ApacheHttpClientResponse(CloseableHttpResponse response, Charset responseCharset) {
         this.response = response;
+        this.responseCharset = responseCharset;
     }
 
     @Override
     public String getString() {
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+        try (final BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),responseCharset))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {

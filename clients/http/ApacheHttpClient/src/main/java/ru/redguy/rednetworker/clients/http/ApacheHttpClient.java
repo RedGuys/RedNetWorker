@@ -136,10 +136,10 @@ public class ApacheHttpClient implements IHttpClient {
                 throw new HttpProtocolException(
                         response.getStatusLine().getReasonPhrase(),
                         response.getStatusLine().getStatusCode(),
-                        new ApacheHttpClientResponse(response)
+                        new ApacheHttpClientResponse(response, responseCharset)
                 );
             } else {
-                return new ApacheHttpClientResponse(response);
+                return new ApacheHttpClientResponse(response, responseCharset);
             }
         } catch (ClientProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
@@ -192,10 +192,10 @@ public class ApacheHttpClient implements IHttpClient {
                 throw new HttpProtocolException(
                         response.getStatusLine().getReasonPhrase(),
                         response.getStatusLine().getStatusCode(),
-                        new ApacheHttpClientResponse(response)
+                        new ApacheHttpClientResponse(response, responseCharset)
                 );
             } else {
-                return new ApacheHttpClientResponse(response);
+                return new ApacheHttpClientResponse(response, responseCharset);
             }
         } catch (ClientProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
