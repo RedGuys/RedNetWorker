@@ -1,18 +1,21 @@
 package ru.redguy.rednetworker.clients.http;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class JavaNetResponse implements IHttpResponse {
 
     private final InputStream inputStream;
+    private final Charset responseCharset;
 
-    JavaNetResponse(InputStream inputStream) {
+    JavaNetResponse(InputStream inputStream, Charset responseCharset) {
         this.inputStream = inputStream;
+        this.responseCharset = responseCharset;
     }
 
     @Override
     public String getString() {
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
+        try (final BufferedReader in = new BufferedReader(new InputStreamReader(inputStream,responseCharset))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {

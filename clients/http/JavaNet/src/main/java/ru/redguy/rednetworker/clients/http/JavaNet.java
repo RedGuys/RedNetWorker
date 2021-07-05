@@ -122,7 +122,7 @@ public class JavaNet implements IHttpClient {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
         try {
-            return new JavaNetResponse(connection.getInputStream());
+            return new JavaNetResponse(connection.getInputStream(),responseCharset);
         } catch (FileNotFoundException e) {
             throw new HttpProtocolException("Not Found",404,null);
         }
@@ -188,7 +188,7 @@ public class JavaNet implements IHttpClient {
                 break;
         }
         try {
-            return new JavaNetResponse(connection.getInputStream());
+            return new JavaNetResponse(connection.getInputStream(),responseCharset);
         } catch (FileNotFoundException e) {
             throw new HttpProtocolException("Not Found",404,null);
         }
