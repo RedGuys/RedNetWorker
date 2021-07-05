@@ -26,7 +26,7 @@ public interface IHttpClient {
 
     IHttpClient setStreamBody(InputStream stream);
 
-    IHttpClient setRequestCharset(Charset charset);
+    default IHttpClient setRequestCharset(Charset charset) {return null;};
 
     IHttpClient setResponseCharset(Charset charset);
 

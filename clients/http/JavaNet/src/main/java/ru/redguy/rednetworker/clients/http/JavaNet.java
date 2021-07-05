@@ -23,7 +23,6 @@ public class JavaNet implements IHttpClient {
     private File postFileBody = null;
     private InputStream postStreamBody = null;
     private BodyType bodyType = BodyType.params;
-    private Charset requestCharset = Charset.defaultCharset();
     private Charset responseCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
@@ -81,12 +80,6 @@ public class JavaNet implements IHttpClient {
     public JavaNet setStreamBody(InputStream stream) {
         this.bodyType = BodyType.stream;
         postStreamBody = stream;
-        return this;
-    }
-
-    @Override
-    public JavaNet setRequestCharset(Charset charset) {
-        requestCharset = charset;
         return this;
     }
 
