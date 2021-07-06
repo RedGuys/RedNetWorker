@@ -111,6 +111,7 @@ public class JavaNet implements IHttpClient {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type",contentType);
         } catch (ProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
@@ -126,6 +127,7 @@ public class JavaNet implements IHttpClient {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         try {
             connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type",contentType);
         } catch (ProtocolException e) {
             throw new HttpProtocolException(e.getCause(),e.getMessage());
         }
