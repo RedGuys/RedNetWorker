@@ -161,13 +161,10 @@ public class ApacheFTPSession implements IFTPSession {
 
     @Override
     public void changeLocalTransferMode(TransferMode transferMode) {
-        switch (transferMode) {
-            case ACTIVE:
-                client.enterLocalActiveMode();
-                break;
-            case PASSIVE:
-                client.enterLocalPassiveMode();
-                break;
+        if (transferMode == TransferMode.ACTIVE) {
+            client.enterLocalActiveMode();
+        } else {
+            client.enterLocalPassiveMode();
         }
     }
 
