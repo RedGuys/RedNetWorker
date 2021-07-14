@@ -254,13 +254,6 @@ public class Ftp4jFTPSession implements IFTPSession {
 
     @Override
     public void changeLocalTransferMode(TransferMode transferMode) {
-        switch (transferMode) {
-            case ACTIVE:
-                client.setPassive(false);
-                break;
-            case PASSIVE:
-                client.setPassive(true);
-                break;
-        }
+        client.setPassive(transferMode != TransferMode.ACTIVE);
     }
 }
