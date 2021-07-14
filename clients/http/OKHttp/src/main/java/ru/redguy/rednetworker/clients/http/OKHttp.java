@@ -25,7 +25,6 @@ public class OKHttp implements IHttpClient {
     private InputStream postStreamBody = null;
     private BodyType bodyType = BodyType.params;
     private Charset requestCharset = Charset.defaultCharset();
-    private Charset responseCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
 
     public OKHttp() {
@@ -88,12 +87,6 @@ public class OKHttp implements IHttpClient {
     @Override
     public IHttpClient setRequestCharset(Charset charset) {
         requestCharset = charset;
-        return this;
-    }
-
-    @Override
-    public IHttpClient setResponseCharset(Charset charset) {
-        responseCharset = charset;
         return this;
     }
 
