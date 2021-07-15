@@ -117,13 +117,10 @@ public class ApacheFluentAPI implements IHttpClient {
 
     @Override
     public ApacheFluentAPIResponse execute() throws HttpProtocolException, IOException {
-        switch (httpMethod) {
-            case GET:
-                return get();
-            case POST:
-                return post();
+        if (httpMethod == HttpMethod.POST) {
+            return post();
         }
-        return null;
+        return get();
     }
 
     private ApacheFluentAPIResponse get() throws HttpProtocolException, IOException {
