@@ -1,6 +1,10 @@
 package ru.redguy.rednetworker.clients.http;
 
-import okhttp3.*;
+import okhttp3.Response;
+import okhttp3.Request;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import ru.redguy.rednetworker.clients.http.exceptions.HttpProtocolException;
 import ru.redguy.rednetworker.utils.HttpUtils;
 import ru.redguy.rednetworker.utils.Protocols;
@@ -26,10 +30,6 @@ public class OKHttp implements IHttpClient {
     private BodyType bodyType = BodyType.params;
     private Charset requestCharset = Charset.defaultCharset();
     private String contentType = "text/plain";
-
-    public OKHttp() {
-
-    }
 
     @Override
     public OKHttp method(HttpMethod httpMethod) {
