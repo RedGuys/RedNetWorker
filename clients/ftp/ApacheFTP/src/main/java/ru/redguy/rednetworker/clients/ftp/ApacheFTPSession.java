@@ -91,7 +91,7 @@ public class ApacheFTPSession implements IFTPSession {
                 case 2:
                     myftpfile.type = ApacheFTPFileType.SYMBOLIC_LINK;
                     break;
-                case 3:
+                default:
                     myftpfile.type = ApacheFTPFileType.UNKNOWN;
                     break;
             }
